@@ -41,3 +41,11 @@ class CSVManager:
 
     def info(self):
         pass
+
+class HDF5Manager:
+    def __init__(self,file_path,mode,read_only,archive_status):
+        self.file_path = file_path
+        self.mode = mode
+        self.data = None
+        self.read_only = read_only
+        self.archive_status = archive_status
