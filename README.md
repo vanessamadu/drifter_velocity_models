@@ -31,8 +31,8 @@ This set of packages has the following requirements:
 - `info()`: Displays information (metadata) about the CSV file and its configuration.
 
 #### Method Documentation
-##### read(self)
-`read()`: Reads data from the CSV file into the `data` attribute.
+##### read()
+`read(self)`: Reads data from the CSV file into the `data` attribute.
 Raises: 
 - `IOError`: If the file cannot be read.
 - `ValueError`: If there are issues with the file structure/encoding error.
