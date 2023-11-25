@@ -49,3 +49,15 @@ class HDF5Manager:
         self.data = None
         self.read_only = read_only
         self.archive_status = archive_status
+
+    def read(self):
+        pass
+
+    def write(self):
+        pass
+
+    def get_dataset(name):
+        pass
+
+    def info():
+        pass

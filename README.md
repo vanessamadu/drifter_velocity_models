@@ -47,3 +47,9 @@ Raises:
 - `data` (h5py.File): The HDF5 file object.
 - `read_only` (bool): Flag indicating if the HDF5 file is in read-only mode.
 - `archive_status` (bool): Flag indicating if the data is archived
+
+#### Class Methods
+- `read()`: Reads data from the HDF5 file into the `data` attribute. 
+- `write()`: Writes data to the HDF5 file using the current state of the HDF5 object. 
+- `get_dataset(name)`: Retrieves a dataset from the HDF5 file.
+- `info()`: Displays information (metadata) about the HDF5 file and its configuration.
