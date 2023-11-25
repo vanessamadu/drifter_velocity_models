@@ -14,7 +14,7 @@ This set of packages has the following requirements:
 - `column_names` (list): List of column names, populated from header row if `has_header` is `True`.
 - `data` (dataframe): The data from the CSV file
 - `read_only` (bool): Flag indicating if the CSV file is in read-only mode.
-- `error_handling` (str): How the CSV class should handle errors (`raise`, `log`, `skip`, etc...)
+- `error_handling` (str): How the CSV class should handle errors (`"raise"`, `"log"`, `"skip"`, etc...)
 - `encoding` (str): The character encoding used in the CSV file
 - `line_endings` (str): The line ending characters used in the CSV file.
 - `metadata` (dict): Additional metadata about the CSV file.
