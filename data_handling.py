@@ -20,3 +20,24 @@ class CSVManager:
         self.metadata = {}
         self.datetime_format = datetime_format
         self.archive_status = archive_status
+
+    def read(self):
+        pass
+
+    def write(self):
+        pass
+
+    def row_filter(self):
+        pass
+
+    def col_filter(self):
+        pass
+
+    def aggregate(self):
+        pass
+
+    def validate(self):
+        pass
+
+    def info(self):
+        pass
