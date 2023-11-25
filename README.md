@@ -20,3 +20,12 @@ This set of packages has the following requirements:
 - `metadata` (dict): Additional metadata about the CSV file.
 - `datetime_format` (str): The format for date and time columns in the CSV file.
 - `archive_status` (bool): Flag indicating if the data is archived
+
+#### Class Methods
+- `read()`: Reads data from the CSV file into the `data` attribute. 
+- `write()`: Writes data to the CSV file using the current state of the CSV object. 
+- `row_filter()`: Filters rows based on specified conditions. 
+- `col_filter()`: Filters columns to only those specified
+- `aggregate()`: Aggregates data based on specified conditions. 
+- `validate()`: Validates the data against user-defined validation rules.
+- `info()`: Displays information (metadata) about the CSV file and its configuration.
