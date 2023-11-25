@@ -33,6 +33,6 @@ This set of packages has the following requirements:
 #### Method Documentation
 ##### read()
 `read(self)`: Reads data from the CSV file into the `data` attribute.
-	Raises: 
-	- `IOError`: If the file cannot be read.
-	- `ValueError`: If there are issues with the file structure/encoding error.
+Raises: 
+- `IOError`: If the file cannot be read.
+- `ValueError`: If there are issues with the file structure/encoding error.
