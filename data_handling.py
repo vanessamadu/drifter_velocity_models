@@ -140,6 +140,12 @@ class HDF5Manager:
     
     ## init checks
     def __check_init(self):
+        '''
+        Checks if file path and mode are valid.
+
+        Raises:
+        See `__check_file_path` and `__check_mode` methods.
+        '''
         self.__check_file_path(self.file_path)
         self.__check_mode(self.mode)
 

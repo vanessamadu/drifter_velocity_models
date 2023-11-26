@@ -65,6 +65,35 @@ Raises:
     - If file path contains invalid characters.
 - FileNotFoundError: If file path does not exist.
 
+###### __check_mode()
+`__check_mode(self)`: Checks if mode is valid.
+Raises:
+ - ValueError: If mode is not 'r', 'w', or 'a'.
+
+###### __check_group_path()
+`__check_group_path(self,group_path)`: Checks if group path is valid.
+Parameters:
+    - `group_path` (str): The group path to be checked.
+
+Raises:
+- ValueError: 
+    - If group path is not a string.
+    - If group path is empty.
+    - If group path contains invalid characters.
+
+###### __check_dataset_name()
+`__check_dataset_name(self,dataset_name)`: Checks if dataset name is valid.
+Parameters:
+    - `dataset_name` (str): The dataset name to be checked.
+
+Raises:
+- ValueError: 
+    - If dataset name is not a string.
+    - If dataset name is empty.
+    - If dataset name contains invalid characters.
+
+
+    
 ##### Instance Methods
 ###### read()
 `read(self)`:Reads h5py.File object into the `data` attribute. A object that is iterable similarly to a dictionary.
