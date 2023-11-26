@@ -4,6 +4,7 @@ from data_handling import HDF5Manager
 import pytest
 import h5py
 import os
+import logging
 
 # HDF5Manager Tests
 class HDF5_Read_Tests:
@@ -56,7 +57,7 @@ class HDF5_Read_Tests:
         # Verify
         assert manager.data is None
 
-    def test_data_attribute_contains_h5py_File_object_after_read(self, set_up_existing_file):
+    def test_data_contains_h5py_File_object(self, set_up_existing_file):
         # Setup
         file_path = set_up_existing_file
         # Exercise
@@ -64,3 +65,14 @@ class HDF5_Read_Tests:
         manager.read()
         # Verify
         assert isinstance(manager.data, h5py.File)
+
+    def test_read_nonexistent_file_raises_FileNotFoundError_and_logs_exception(self,caplog,set_up_nonexistent_file):
+        # Set up
+        file_path = set_up_nonexistent_file
+        # Exercise
+        manager = HDF5Manager(file_path)
+        # Verify
+        with pytest.raises(FileNotFoundError):
+            manager.read()
+        assert "File not found." in caplog.text
+        assert caplog.records.levelname == "ERROR"
