@@ -57,6 +57,8 @@ Raises:
 #### Method Documentation
 ##### read()
 `read(self)`:Reads h5py.File object into the `data` attribute. A object that is iterable similarly to a dictionary.
-Raises: 
-- `IOError`: If the file cannot be read.
-- `ValueError`: If there are issues with the file structure/encoding error.
+Raises:
+- `FileNotFoundError`: If file does not exist.
+- `IOError`: If file is not readable.
+- `OSError`: If file is not a valid HDF5 file.
+- `ValueError`: If file is not in read-only mode/file has already been read.
