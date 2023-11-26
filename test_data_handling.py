@@ -6,7 +6,7 @@ import h5py
 import os
 
 # HDF5Manager Tests
-class HDF5_Read_Tests:
+class HDF5_Read_tests:
     # Setup test files
     @pytest.fixture
     def set_up_existing_file(self):
@@ -58,7 +58,7 @@ class HDF5_Read_Tests:
         # Setup
         file_path = set_up_existing_file
         # Exercise
-        manager = HDF5Manager(file_path)
+        manager = HDF5Manager(file_path,mode = 'r',read_only = False,archive_status = False)
         manager.read()
         # Verify
         assert manager.data is not None
@@ -70,7 +70,7 @@ class HDF5_Read_Tests:
         # Setup
         file_path = set_up_existing_file
         # Exercise
-        manager = HDF5Manager(file_path)
+        manager = HDF5Manager(file_path,mode = 'r',read_only = False,archive_status = False)
         # Verify
         assert manager.data is None
 
@@ -81,7 +81,7 @@ class HDF5_Read_Tests:
         # Setup
         file_path = set_up_existing_file
         # Exercise
-        manager = HDF5Manager(file_path)
+        manager = HDF5Manager(file_path,mode = 'r',read_only = False,archive_status = False)
         manager.read()
         # Verify
         assert isinstance(manager.data, h5py.File)
@@ -93,7 +93,7 @@ class HDF5_Read_Tests:
         # Set up
         file_path = set_up_nonexistent_file
         # Exercise
-        manager = HDF5Manager(file_path)
+        manager = HDF5Manager(file_path,mode = 'r',read_only = False,archive_status = False)
         # Verify
         with pytest.raises(FileNotFoundError):
             manager.read()
@@ -107,7 +107,7 @@ class HDF5_Read_Tests:
         # Set up
         file_path = setup_non_hdf5_file
         # Exercise
-        manager = HDF5Manager(file_path)
+        manager = HDF5Manager(file_path,mode = 'r',read_only = False,archive_status = False)
         # Verify
         with pytest.raises(OSError):
             manager.read()
@@ -121,7 +121,7 @@ class HDF5_Read_Tests:
         # Set up
         file_path = setup_no_permissions_file
         # Exercise
-        manager = HDF5Manager(file_path)
+        manager = HDF5Manager(file_path,mode = 'r',read_only = False,archive_status = False)
         # Verify
         with pytest.raises(IOError):
             manager.read()
@@ -136,10 +136,11 @@ class HDF5_Read_Tests:
         # Set up
         file_path = set_up_existing_file
         # Exercise
-        manager = HDF5Manager(file_path, mode='r')
+        manager = HDF5Manager(file_path,mode = 'r',read_only = False,archive_status = False)
         manager.read()
         # Verify
         with pytest.raises(ValueError,match="File has already been read."):
             manager.read()
         assert "File has already been read." in caplog.text
         assert "ERROR" in caplog.text
+        
