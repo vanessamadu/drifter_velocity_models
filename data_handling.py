@@ -76,8 +76,24 @@ class HDF5Manager:
             print("File is not a valid HDF5 file.")
             raise ose
 
-    def write(self):
-        pass
+    def write(self, dataset_name, dataset, group_path):
+        '''
+        Writes new datasets to a specific group (subgroup) of an h5py.File object in the `data` attribute.
+
+        Parameters:
+            - `dataset_name` (str): The name of the new dataset.
+            - `dataset` (any type): The new dataset.
+            - `group_path` (str): Path to the new dataset destination.
+
+        Raises:
+            - FileNotFoundError: If the file does not exist.
+            - ValueError:
+                - If the file is not writable.
+                - If the group/subgroup path does not exist in the HDF5 file.
+                - If `dataset_name` is not a valid dataset name.
+                - If `dataset` is empty or None.
+            - OSError: If the file is not a valid HDF5 file.
+        '''
 
     def get_dataset(name):
         pass
