@@ -62,3 +62,18 @@ Raises:
 - `IOError`: If file is not readable.
 - `OSError`: If file is not a valid HDF5 file.
 - `ValueError`: If file has already been read.
+
+##### write()
+`write(self, dataset_name, dataset, group_path)`: Writes new data sets to a specific group (subgroup) of an h5py.File object in the `data` attribute.
+Parameters:
+- `dataset_name` (str): The name of the new dataset
+- `dataset` (any type): The new dataset
+- `group_path` (str): Path to the new dataset destination.
+Raises:
+- `FileNotFoundError`: If file does not exist.
+- `ValueError`:
+    - If file is not writeable.
+    - If group path does not exist in the HDF5 file.
+    - If `dataset_name` is not a valid dataset name.
+    - If `dataset` is empty or None
+- `OSError`: If file is not a valid HDF5 file.
