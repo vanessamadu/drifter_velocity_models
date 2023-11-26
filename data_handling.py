@@ -156,8 +156,7 @@ class HDF5Manager:
 
         Raises:
             FileNotFoundError: If file does not exist.
-            IOError: If file is not readable.
-            OSError: If file is not a valid HDF5 file. 
+            OSError: If file is not readable.
             ValueError: If file has already been read.
         '''
         # Check if file is in read-only mode or has already been read
@@ -169,12 +168,9 @@ class HDF5Manager:
                 self.data = file
         except FileNotFoundError as fnfe:
             logging.error("File not found.")
-            raise fnfe               
-        except IOError as ioe:
-            logging.error("File not readable.")
-            raise ioe
+            raise fnfe              
         except OSError as ose:
-            logging.error("File is not a valid HDF5 file.")
+            logging.error("File not readable.")
             raise ose
 
     def write(self, dataset_name, dataset, group_path, overwrite=False, new_group=False):
@@ -199,6 +195,7 @@ class HDF5Manager:
                 - If `dataset` is empty or None.
                 - If `group_path` is not a valid group path.
             - KeyError: If `group_path` does not exist.
+            - PermissionError: If file is in read-only mode.
         '''
         # Check validity of parameters
         if self.mode not in ['a','w']:
@@ -224,6 +221,9 @@ class HDF5Manager:
         except ValueError as ve:
             logging.error("Error writing dataset: %s", ve)
             raise ValueError("Dataset name already exists in group.")
+        except PermissionError as pe:
+            logging.error("Error writing dataset: %s", pe)
+            raise PermissionError("File is in read-only mode.")
         except KeyError as ke:
             logging.error("Error writing dataset: %s", ke)
             raise KeyError("Group path does not exist.")
