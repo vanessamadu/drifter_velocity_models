@@ -14,3 +14,7 @@ class HDF5_Read_Tests:
             group = file.create_group('/test_group')
             group.create_dataset('test_dataset', data=[1,2,3])
         return file_path
+    
+    @pytest.fixture
+    def set_up_nonexistent_file(self):
+        return 'nonexistent_file.h5'
