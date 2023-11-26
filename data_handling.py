@@ -52,7 +52,7 @@ class HDF5Manager:
         self.read_only = read_only
         self.archive_status = archive_status
 
-    # CLASS HELPER METHODS/FUNCTIONS
+    # VALIDATION METHODS
 
     def __check_file_path(self):
         '''
@@ -141,7 +141,7 @@ class HDF5Manager:
     ## init checks
     __check_file_path(self.file_path)
     __check_mode(self.mode)
-    
+
     # INSTANCE METHODS
     def read(self):
         '''
