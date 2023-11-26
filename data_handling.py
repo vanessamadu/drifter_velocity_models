@@ -158,7 +158,7 @@ class HDF5Manager:
             FileNotFoundError: If file does not exist.
             IOError: If file is not readable.
             OSError: If file is not a valid HDF5 file. 
-            ValueError: If file is not in read-only mode/file has already been read.
+            ValueError: If file has already been read.
         '''
         # Check if file is in read-only mode or has already been read
         if self.data is not None:
