@@ -4,7 +4,6 @@ from data_handling import HDF5Manager
 import pytest
 import h5py
 import os
-import logging
 
 # HDF5Manager Tests
 class HDF5_Read_Tests:
