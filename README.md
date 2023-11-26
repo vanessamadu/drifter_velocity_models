@@ -69,6 +69,10 @@ Parameters:
 - `dataset_name` (str): The name of the new dataset
 - `dataset` (any type): The new dataset
 - `group_path` (str): Path to the new dataset destination.
+- `overwrite` (bool): If True, overwrite existing dataset with the same name. Default is False.
+                If False and dataset name already exists, raise ValueError.
+- `new_group` (bool): If True, create a new subgroup if the group path does not exist. Default is False.
+                If False and group path does not exist, raise KeyError.
 Raises:
 - ValueError:
     - If self.mode is not 'a' or 'w'.
