@@ -90,7 +90,7 @@ class HDF5Manager:
             logging.error("Invalid mode.")
             raise ValueError("Mode must be 'r', 'w', or 'a'.")
     
-    def __check_group_path(group_path):
+    def __check_group_path(self,group_path):
         '''
         Checks if group path is valid.
 
@@ -114,7 +114,7 @@ class HDF5Manager:
             logging.error("Invalid characters in group path.")
             raise ValueError("Group path contains invalid characters.")
 
-    def __check_dataset_name(dataset_name):
+    def __check_dataset_name(self,dataset_name):
         '''
         Checks if dataset name is valid.
 
@@ -139,8 +139,9 @@ class HDF5Manager:
             raise ValueError("Dataset name contains invalid characters.")
     
     ## init checks
-    __check_file_path(self.file_path)
-    __check_mode(self.mode)
+    def __check_init(self):
+        self.__check_file_path(self.file_path)
+        self.__check_mode(self.mode)
 
     # INSTANCE METHODS
     def read(self):
@@ -200,8 +201,8 @@ class HDF5Manager:
         if dataset is None or dataset == []:
             logging.error("Invalid dataset.")
             raise ValueError("Dataset is empty.")
-        __check_group_path(group_path)
-        __check_dataset_name(dataset_name)
+        self.__check_group_path(group_path)
+        self.__check_dataset_name(dataset_name)
         # Check if file has been read
         if self.data is None:
             logging.error("File has not been read.")
