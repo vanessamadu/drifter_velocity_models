@@ -92,6 +92,11 @@ Raises:
     - If dataset name is empty.
     - If dataset name contains invalid characters.
 
+###### __check_init()
+`__check_init(self)`: Checks if file path and mode are valid.
+
+Raises:
+See [`__check_file_path`](#__check_file_path) and [`__check_mode`](#__check_mode) methods.
 
     
 ##### Instance Methods
