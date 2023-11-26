@@ -51,7 +51,32 @@ class HDF5Manager:
         self.archive_status = archive_status
 
     def read(self):
-        pass
+        '''
+        Read data from HDF5 file into `data` attribute as an h5py.File object.
+
+        Raises:
+            FileNotFoundError: If file does not exist.
+            IOError: If file is not readable.
+            OSError: If file is not a valid HDF5 file. 
+            ValueError: If file is not in read-only mode/file has already been read.
+        '''
+        try:
+            # Check if file is in read-only mode or has already been read
+            if self.data is None:
+                raise ValueError("File has already been read.")
+            elif self.read_only:
+                self.data = h5py.File(self.file_path,mode=self.mode)
+                self.data.close()
+                raise ValueError("File is in read-only mode.")
+            else:
+                self.data = h5py.File(self.file_path,mode=self.mode)
+                self.data.close()
+        except FileNotFoundError:
+            print("File not found.")
+        except IOError:
+            print("File is not readable.")
+        except OSError:
+            print("File is not a valid HDF5 file.")
 
     def write(self):
         pass
