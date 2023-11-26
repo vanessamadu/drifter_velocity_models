@@ -60,23 +60,21 @@ class HDF5Manager:
             OSError: If file is not a valid HDF5 file. 
             ValueError: If file is not in read-only mode/file has already been read.
         '''
+        # Check if file is in read-only mode or has already been read
+        if self.data is not None:
+            raise ValueError("File has already been read.") # raise new specific exception
         try:
-            # Check if file is in read-only mode or has already been read
-            if self.data is None:
-                raise ValueError("File has already been read.")
-            elif self.read_only:
-                self.data = h5py.File(self.file_path,mode=self.mode)
-                self.data.close()
-                raise ValueError("File is in read-only mode.")
-            else:
-                self.data = h5py.File(self.file_path,mode=self.mode)
-                self.data.close()
-        except FileNotFoundError:
-            print("File not found.")
-        except IOError:
+            with h5py.File(self.file_path, mode=self.mode) as file:
+                self.data = file
+        except FileNotFoundError as fnfe:
+            print("File not found.") # handle the exception that was raised
+            raise fnfe               # re-raise last exception caught
+        except IOError as ioe:
             print("File is not readable.")
-        except OSError:
+            raise ioe
+        except OSError as ose:
             print("File is not a valid HDF5 file.")
+            raise ose
 
     def write(self):
         pass
