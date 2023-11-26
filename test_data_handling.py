@@ -3,7 +3,6 @@
 from data_handling import HDF5Manager
 import pytest
 import h5py
-import os
 
 # HDF5Manager Tests
 class TestHDF5Manager:
