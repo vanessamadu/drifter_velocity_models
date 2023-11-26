@@ -76,3 +76,37 @@ class HDF5_Read_Tests:
             manager.read()
         assert "File not found." in caplog.text
         assert caplog.records.levelname == "ERROR"
+
+    def test_read_non_hdf5_file_raises_OSError_and_logs_exception(self,caplog,setup_non_hdf5_file):
+        # Set up
+        file_path = setup_non_hdf5_file
+        # Exercise
+        manager = HDF5Manager(file_path)
+        # Verify
+        with pytest.raises(OSError):
+            manager.read()
+        assert "File is not a valid HDF5 file." in caplog.text
+        assert caplog.records.levelname == "ERROR"
+
+    def test_read_no_permission_file_raises_IOError_and_logs_exception(self,caplog,setup_no_permissions_file):
+        # Set up
+        file_path = setup_no_permissions_file
+        # Exercise
+        manager = HDF5Manager(file_path)
+        # Verify
+        with pytest.raises(IOError):
+            manager.read()
+        assert "File is not readable." in caplog.text
+        assert caplog.records.levelname == "ERROR"
+
+    def test_read_existing_file_with_read_only_mode_raises_ValueError_and_logs_exception(self,caplog,set_up_existing_file):
+        # Set up
+        file_path = set_up_existing_file
+        # Exercise
+        manager = HDF5Manager(file_path, mode='r')
+        manager.read()
+        # Verify
+        with pytest.raises(ValueError):
+            manager.read()
+        assert "File has already been read." in caplog.text
+        assert caplog.records.levelname == "ERROR"
