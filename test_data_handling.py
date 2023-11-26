@@ -18,3 +18,10 @@ class HDF5_Read_Tests:
     @pytest.fixture
     def set_up_nonexistent_file(self):
         return 'nonexistent_file.h5'
+    
+    @pytest.fixture
+    def setup_non_hdf5_file(self):
+        non_hdf5_file_path = 'non_hdf5_file.txt'
+        with open(non_hdf5_file_path,'w') as file:
+            file.write('This is not an HDF5 file.')
+        return non_hdf5_file_path
