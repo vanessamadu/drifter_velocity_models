@@ -70,10 +70,11 @@ Parameters:
 - `dataset` (any type): The new dataset
 - `group_path` (str): Path to the new dataset destination.
 Raises:
-- `FileNotFoundError`: If file does not exist.
-- `ValueError`:
-    - If file is not writeable.
-    - If group path does not exist in the HDF5 file.
+- ValueError:
+    - If self.mode is not 'a' or 'w'.
+    - If the self.data is empty.
+    - If the dataset name already exists in the group.
     - If `dataset_name` is not a valid dataset name.
-    - If `dataset` is empty or None
-- `OSError`: If file is not a valid HDF5 file.
+    - If `dataset` is empty or None.
+    - If `group_path` is not a valid group path.
+- KeyError: If `group_path` does not exist.

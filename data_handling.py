@@ -192,6 +192,7 @@ class HDF5Manager:
                 - If `dataset_name` is not a valid dataset name.
                 - If `dataset` is empty or None.
                 - If `group_path` is not a valid group path.
+            - KeyError: If `group_path` does not exist.
         '''
         # Check validity of parameters
         if self.mode not in ['a','w']:
