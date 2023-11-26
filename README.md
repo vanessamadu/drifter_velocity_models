@@ -55,7 +55,18 @@ Raises:
 - `info()`: Displays information (metadata) about the HDF5 file and its configuration.
 
 #### Method Documentation
-##### read()
+##### Validation Methods
+###### __check_file_path()
+`__check_file_path(self)`: Checks if file path is valid.
+Raises:
+- ValueError: 
+    - If file path is not a string.
+    - If file path is empty.
+    - If file path contains invalid characters.
+- FileNotFoundError: If file path does not exist.
+
+##### Instance Methods
+###### read()
 `read(self)`:Reads h5py.File object into the `data` attribute. A object that is iterable similarly to a dictionary.
 Raises:
 - `FileNotFoundError`: If file does not exist.
@@ -63,7 +74,7 @@ Raises:
 - `OSError`: If file is not a valid HDF5 file.
 - `ValueError`: If file has already been read.
 
-##### write()
+###### write()
 `write(self, dataset_name, dataset, group_path)`: Writes new data sets to a specific group (subgroup) of an h5py.File object in the `data` attribute.
 Parameters:
 - `dataset_name` (str): The name of the new dataset
