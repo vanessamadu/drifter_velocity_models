@@ -86,14 +86,27 @@ class HDF5Manager:
             - `group_path` (str): Path to the new dataset destination.
 
         Raises:
-            - FileNotFoundError: If the file does not exist.
             - ValueError:
-                - If the file is not writable.
-                - If the group/subgroup path does not exist in the HDF5 file.
+                - If self.mode is not 'a' or 'w'.
+                - If the self.data is empty.
+                - If the dataset name already exists in the group.
                 - If `dataset_name` is not a valid dataset name.
                 - If `dataset` is empty or None.
-            - OSError: If the file is not a valid HDF5 file.
+                - If `group_path` is not a valid group path.
         '''
+        # Check validity of parameters
+        if self.mode not in ['a','w']:
+            raise ValueError("File is not in append or write mode.")
+        if type(dataset_name) is not str:
+            raise ValueError("Dataset name must be a string.")
+        if dataset is None or dataset == []:
+            raise ValueError("Dataset is empty.")
+        if type(group_path) is not str:
+            raise ValueError("Group path must be a string.")
+        # Check if file has been read
+        if self.data is None:
+            raise ValueError("File has not been read.")
+        # Check if dataset name already exists in group
 
     def get_dataset(name):
         pass
