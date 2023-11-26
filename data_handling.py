@@ -90,7 +90,7 @@ class HDF5Manager:
             logging.error("Invalid mode.")
             raise ValueError("Mode must be 'r', 'w', or 'a'.")
     
-    def check_group_path(group_path):
+    def __check_group_path(group_path):
         '''
         Checks if group path is valid.
 
@@ -114,7 +114,34 @@ class HDF5Manager:
             logging.error("Invalid characters in group path.")
             raise ValueError("Group path contains invalid characters.")
 
+    def __check_dataset_name(dataset_name):
+        '''
+        Checks if dataset name is valid.
 
+        Parameters:
+            - `dataset_name` (str): The dataset name to be checked.
+
+        Raises:
+            - ValueError: 
+                - If dataset name is not a string.
+                - If dataset name is empty.
+                - If dataset name contains invalid characters.
+        '''
+        if not isinstance(dataset_name, str):
+            logging.error("Invalid dataset name type.")
+            raise ValueError("Dataset name must be a string.")
+        if not dataset_name:
+            logging.error("Dataset name cannot be empty.")
+            raise ValueError("Dataset name cannot be empty.")
+        invalid_chars = set('<>:\"/\\|?* ')
+        if any(char in invalid_chars for char in dataset_name):
+            logging.error("Invalid characters in dataset name.")
+            raise ValueError("Dataset name contains invalid characters.")
+    
+    ## init checks
+    __check_file_path(self.file_path)
+    __check_mode(self.mode)
+    
     # INSTANCE METHODS
     def read(self):
         '''
@@ -128,18 +155,19 @@ class HDF5Manager:
         '''
         # Check if file is in read-only mode or has already been read
         if self.data is not None:
-            raise ValueError("File has already been read.") # raise new specific exception
+            logging.error("File has already been read.")
+            raise ValueError("File has already been read.")
         try:
             with h5py.File(self.file_path, mode=self.mode) as file:
                 self.data = file
         except FileNotFoundError as fnfe:
-            print("File not found.") # handle the exception that was raised
-            raise fnfe               # re-raise last exception caught
+            logging.error("File not found.")
+            raise fnfe               
         except IOError as ioe:
-            print("File is not readable.")
+            logging.error("File not readable.")
             raise ioe
         except OSError as ose:
-            print("File is not a valid HDF5 file.")
+            logging.error("File is not a valid HDF5 file.")
             raise ose
 
     def write(self, dataset_name, dataset, group_path, overwrite=False, new_group=False):
@@ -168,13 +196,12 @@ class HDF5Manager:
         if self.mode not in ['a','w']:
             logging.error("File not writable.")
             raise ValueError("File is not in append or write mode.")
-        if type(dataset_name) is not str:
-            logging.error("Invalid dataset name.")
             raise ValueError("Dataset name must be a string.")
         if dataset is None or dataset == []:
             logging.error("Invalid dataset.")
             raise ValueError("Dataset is empty.")
-        check_group_path(group_path)
+        __check_group_path(group_path)
+        __check_dataset_name(dataset_name)
         # Check if file has been read
         if self.data is None:
             logging.error("File has not been read.")
