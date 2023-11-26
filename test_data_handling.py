@@ -36,3 +36,31 @@ class HDF5_Read_Tests:
         # Change file permissions to read-only
         os.chmod(no_permission_file_path, 0o400)
         return no_permission_file_path
+    
+    # Define test methods
+
+    def test_data_attribute_is_populated_after_read(self, set_up_existing_file):
+        # Setup
+        file_path = set_up_existing_file
+        # Exercise
+        manager = HDF5Manager(file_path)
+        manager.read()
+        # Verify
+        assert manager.data is not None
+
+    def test_data_attribute_is_empty_before_read(self, set_up_existing_file):
+        # Setup
+        file_path = set_up_existing_file
+        # Exercise
+        manager = HDF5Manager(file_path)
+        # Verify
+        assert manager.data is None
+
+    def test_data_attribute_contains_h5py_File_object_after_read(self, set_up_existing_file):
+        # Setup
+        file_path = set_up_existing_file
+        # Exercise
+        manager = HDF5Manager(file_path)
+        manager.read()
+        # Verify
+        assert isinstance(manager.data, h5py.File)
