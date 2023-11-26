@@ -53,3 +53,10 @@ Raises:
 - `write()`: Writes data to the HDF5 file using the current state of the HDF5 object. 
 - `get_dataset(name)`: Retrieves a dataset from the HDF5 file.
 - `info()`: Displays information (metadata) about the HDF5 file and its configuration.
+
+#### Method Documentation
+##### read()
+`read(self)`:Reads h5py.File object into the `data` attribute. A object that is iterable similarly to a dictionary.
+Raises: 
+- `IOError`: If the file cannot be read.
+- `ValueError`: If there are issues with the file structure/encoding error.
