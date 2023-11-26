@@ -3,6 +3,7 @@
 from data_handling import HDF5Manager
 import pytest
 import h5py
+import os
 
 # HDF5Manager Tests
 class HDF5_Read_Tests:
@@ -25,3 +26,13 @@ class HDF5_Read_Tests:
         with open(non_hdf5_file_path,'w') as file:
             file.write('This is not an HDF5 file.')
         return non_hdf5_file_path
+    
+    @pytest.fixture
+    def setup_no_permissions_file(self):
+        no_permission_file_path = 'no_permission_file.h5'
+        with h5py.File(no_permission_file_path,'w') as file:
+            # Create dummy file content to test if file is readable
+            group = file.create_group('/test_group')
+        # Change file permissions to read-only
+        os.chmod(no_permission_file_path, 0o400)
+        return no_permission_file_path
