@@ -104,8 +104,7 @@ See [`__check_file_path`](#__check_file_path) and [`__check_mode`](#__check_mode
 `read(self)`:Reads `h5py.File` object into the `data` attribute. A object that is iterable similarly to a dictionary.
 Raises:
 - `FileNotFoundError`: If file does not exist.
-- `IOError`: If file is not readable.
-- `OSError`: If file is not a valid HDF5 file.
+- `OSError`: If file is not readable.
 - `ValueError`: If file has already been read.
 
 ###### write()
@@ -126,3 +125,4 @@ Raises:
     - If `dataset` is empty or `None`.
     - If `group_path` is not a valid group path.
 - `KeyError`: If `group_path` does not exist.
+- `PermissionError`: If file is in read-only mode.
