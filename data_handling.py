@@ -173,7 +173,7 @@ class HDF5Manager:
             logging.error("File not readable.")
             raise ose
 
-    def write(self, dataset_name, dataset, group_path, overwrite=False, new_group=False):
+    def write(self,group_path, dataset_name, dataset, overwrite=False, new_group=False):
         '''
         Writes new datasets to a specific group of an h5py.File object in the `data` attribute.
 

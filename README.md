@@ -111,7 +111,7 @@ Raises:
 - `ValueError`: If file has already been read.
 
 ###### write()
-`write(self, dataset_name, dataset, group_path)`: Writes new data sets to a specific group of an `h5py.File` object in the `data` attribute.
+`write(self, group_path, dataset_name, dataset)`: Writes new data sets to a specific group of an `h5py.File` object in the `data` attribute.
 Parameters:
 - `dataset_name` (str): The name of the new dataset
 - `dataset` (any type): The new dataset
