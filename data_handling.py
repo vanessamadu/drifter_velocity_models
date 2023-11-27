@@ -109,7 +109,7 @@ class HDF5Manager:
         if not group_path:
             logging.error("Group path cannot be empty.")
             raise ValueError("Group path cannot be empty.")
-        invalid_chars = set('<>:\"/\\|?* ')
+        invalid_chars = set('<>:\"\\|?* ')
         if any(char in invalid_chars for char in group_path):
             logging.error("Group path contains invalid characters.")
             raise ValueError("Group path contains invalid characters.")
@@ -172,60 +172,8 @@ class HDF5Manager:
         except OSError as ose:
             logging.error("File not readable.")
             raise ose
-
-    def write(self,group_path, dataset_name, dataset, overwrite=False, new_group=False):
-        '''
-        Writes new datasets to a specific group of an h5py.File object in the `data` attribute.
-
-        Parameters:
-            - `dataset_name` (str): The name of the new dataset.
-            - `dataset` (any type): The new dataset.
-            - `group_path` (str): Path to the new dataset destination.
-            - `overwrite` (bool): If True, overwrite existing dataset with the same name. Default is False.
-                if False and dataset name already exists, raise ValueError.
-            - `new_group` (bool): If True, create a new subgroup if the group path does not exist. Default is False.
-                If False and group path does not exist, raise KeyError.
-
-        Raises:
-            - ValueError:
-                - If self.mode is not 'a' or 'w'.
-                - If the self.data is empty.
-                - If the dataset name already exists in the group.
-                - If `dataset_name` is not a valid dataset name.
-                - If `dataset` is empty or None.
-                - If `group_path` is not a valid group path.
-            - KeyError: If `group_path` does not exist.
-            - PermissionError: If file is in read-only mode.
-        '''
-        # Check validity of parameters
-        if self.mode not in ['a','w']:
-            logging.error("File is not in append or write mode.")
-            raise ValueError("File is not in append or write mode.")
-        if dataset is None or dataset == []:
-            logging.error("Dataset is empty.")
-            raise ValueError("Dataset is empty.")
-        self.__check_group_path(group_path)
-        self.__check_dataset_name(dataset_name)
-        # Check if file has been read
-        if self.data is None:
-            logging.error("File has not been read.")
-            raise ValueError("File has not been read.")
-
-        # Write dataset to group
-        try:
-            if new_group:
-                self.data.create_dataset(group_path+"/"+dataset_name, data=dataset)
-            elif overwrite:
-                self.data[group_path][dataset_name] = dataset
-        except ValueError as ve:
-            logging.error("Dataset name already exists in group.")
-            raise ve
-        except PermissionError as pe:
-            logging.error("Insufficient permissions")
-            raise pe
-        except KeyError as ke:
-            logging.error("Group path does not exist.")
-            raise ke
+    def write(self):
+        pass
 
     def get_dataset(name):
         pass
