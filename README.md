@@ -6,6 +6,7 @@ This set of packages has the following requirements:
 - os
 - logging
 - pytest (for testing)
+- numpy (for testing)
 
 ## Data Manager Classes
 ### CSV Data Manager Class

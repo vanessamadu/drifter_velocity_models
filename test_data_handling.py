@@ -3,6 +3,7 @@
 from data_handling import HDF5Manager
 import pytest
 import h5py
+import numpy as np
 
 # HDF5Manager Tests
 class TestHDF5ManagerRead:
@@ -137,28 +138,28 @@ class TestHDF5ManagerWrite:
     
     # group path fixtures
     @pytest.fixture
-    def group_path_with_invalid_characters(self):
+    def set_up_group_path_with_invalid_characters(self):
 
         """Return an invalid group path with invalid characters."""
 
         return '/invalid_group_path?'
     
     @pytest.fixture
-    def empty_group_path(self):
+    def set_up_empty_group_path(self):
 
         """Return an empty group path."""
 
         return ''
     
     @pytest.fixture
-    def group_path_with_invalid_type(self):
+    def set_up_group_path_with_invalid_type(self):
 
         """Return a group path with invalid type."""
 
         return 1
     
     @pytest.fixture
-    def non_existent_group_path(self):
+    def set_up_non_existent_group_path(self):
 
         """Return a group path that does not exist."""
 
@@ -167,26 +168,42 @@ class TestHDF5ManagerWrite:
     # dataset fixtures
 
     @pytest.fixture
-    def dataset_name_with_invalid_characters(self):
+    def set_up_dataset_name_with_invalid_characters(self):
 
         """Return a dataset name with invalid characters."""
 
         return 'invalid_dataset_name?'
     
     @pytest.fixture
-    def empty_dataset_name(self):
+    def set_up_empty_dataset_name(self):
 
         """Return an empty dataset name."""
 
         return ''
     
     @pytest.fixture
-    def dataset_name_with_invalid_type(self):
+    def set_up_dataset_name_with_invalid_type(self):
 
         """Return a dataset name with invalid type."""
 
         return 1
     
+    # Define test methods
+
+    def data_attribute_updated_after_write(self, set_up_existing_file):
+
+        """Test that the data attribute is updated after writing."""
+
+        # Setup
+        file_path = set_up_existing_file
+        # Exercise
+        manager = HDF5Manager(file_path = file_path,mode = 'w',read_only = False,archive_status = False)
+        manager.read()
+        manager.write('/test_group','new_dataset', data = [5,6,7])
+        # Verify
+        assert 'new_dataset' in manager.data['/test_group']
+        assert np.array_equal(manager.data['/test_group']['new_dataset'], [5, 6, 7])
+
 
 
         
