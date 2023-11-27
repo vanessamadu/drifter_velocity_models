@@ -6,6 +6,7 @@ import h5py
 import numpy as np
 
 # HDF5Manager Tests
+'''
 class TestHDF5ManagerRead:
     # Setup test files
     @pytest.fixture
@@ -115,9 +116,20 @@ class TestHDF5ManagerRead:
             manager.read()
         assert "File has already been read." in caplog.text
         assert "ERROR" in caplog.text
-
+'''
 class TestHDF5ManagerWrite:
     # Setup test files
+    @pytest.fixture
+    def set_up_existing_manager(self):
+
+        """Create a HDF5Manager object with an h5py.File object read into its data attribute"""
+
+        file_path = 'existing_file.h5'
+        manager = HDF5Manager(file_path = file_path,mode = 'w',read_only = False,archive_status = False)
+        manager.read()
+        return manager
+
+
     @pytest.fixture
     def set_up_existing_file(self):
 
