@@ -201,7 +201,6 @@ class HDF5Manager:
         if self.mode not in ['a','w']:
             logging.error("File not writable.")
             raise ValueError("File is not in append or write mode.")
-            raise ValueError("Dataset name must be a string.")
         if dataset is None or dataset == []:
             logging.error("Invalid dataset.")
             raise ValueError("Dataset is empty.")
@@ -219,14 +218,13 @@ class HDF5Manager:
             elif overwrite:
                 self.data[group_path][dataset_name] = dataset
         except ValueError as ve:
-            logging.error("Error writing dataset: %s", ve)
-            raise ValueError("Dataset name already exists in group.")
+            logging.error("Dataset name already exists in group.")
+            raise ve
         except PermissionError as pe:
-            logging.error("Error writing dataset: %s", pe)
-            raise PermissionError("File is in read-only mode.")
+            logging.error("Insufficient permissions")
+            raise pe
         except KeyError as ke:
-            logging.error("Error writing dataset: %s", ke)
-            raise KeyError("Group path does not exist.")
+            logging.error("Group path does not exist.")
             raise ke
 
     def get_dataset(name):
