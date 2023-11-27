@@ -5,7 +5,7 @@ import pytest
 import h5py
 
 # HDF5Manager Tests
-class TestHDF5Manager:
+class TestHDF5ManagerRead:
     # Setup test files
     @pytest.fixture
     def set_up_existing_file(self):
@@ -114,4 +114,79 @@ class TestHDF5Manager:
             manager.read()
         assert "File has already been read." in caplog.text
         assert "ERROR" in caplog.text
+
+class TestHDF5ManagerWrite:
+    # Setup test files
+    @pytest.fixture
+    def set_up_existing_file(self):
+
+        """Create an HDF5 file and return its path."""
+
+        file_path = 'existing_file.h5'
+        with h5py.File(file_path,'w') as file:
+            group = file.create_group('/test_group')
+            group.create_dataset('test_dataset', data=[1,2,3])
+        return file_path
+    
+    @pytest.fixture
+    def set_up_nonexistent_file(self):
+
+        """Return the path of a nonexistent file."""
+
+        return 'nonexistent_file.h5'
+    
+    # group path fixtures
+    @pytest.fixture
+    def group_path_with_invalid_characters(self):
+
+        """Return an invalid group path with invalid characters."""
+
+        return '/invalid_group_path?'
+    
+    @pytest.fixture
+    def empty_group_path(self):
+
+        """Return an empty group path."""
+
+        return ''
+    
+    @pytest.fixture
+    def group_path_with_invalid_type(self):
+
+        """Return a group path with invalid type."""
+
+        return 1
+    
+    @pytest.fixture
+    def non_existent_group_path(self):
+
+        """Return a group path that does not exist."""
+
+        return '/non_existent_group_path'
+    
+    # dataset fixtures
+
+    @pytest.fixture
+    def dataset_name_with_invalid_characters(self):
+
+        """Return a dataset name with invalid characters."""
+
+        return 'invalid_dataset_name?'
+    
+    @pytest.fixture
+    def empty_dataset_name(self):
+
+        """Return an empty dataset name."""
+
+        return ''
+    
+    @pytest.fixture
+    def dataset_name_with_invalid_type(self):
+
+        """Return a dataset name with invalid type."""
+
+        return 1
+    
+
+
         
