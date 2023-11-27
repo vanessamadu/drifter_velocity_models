@@ -3,6 +3,9 @@
 This set of packages has the following requirements:
 - pandas
 - h5py
+- os
+- logging
+- pytest (for testing)
 
 ## Data Manager Classes
 ### CSV Data Manager Class
