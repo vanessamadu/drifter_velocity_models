@@ -99,7 +99,7 @@ class TestHDF5Manager:
         assert "File not readable" in caplog.text
         assert "ERROR" in caplog.text
 
-    def test_read_existing_file_with_read_only_mode_raises_ValueError_and_logs_exception(self,caplog,set_up_existing_file):
+    def test_re_read_existing_file_raises_ValueError_and_logs_exception(self,caplog,set_up_existing_file):
         
         """Test that reading an existing file with read-only mode raises ValueError 
         and logs the exception."""

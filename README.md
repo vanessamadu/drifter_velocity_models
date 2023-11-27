@@ -126,3 +126,15 @@ Raises:
     - If `group_path` is not a valid group path.
 - `KeyError`: If `group_path` does not exist.
 - `PermissionError`: If file is in read-only mode.
+
+## Testing
+The methods in Data Manager class have (successfully) undergone tests given in `test_data_handling.py` PyTest test suite to verify that they behave as expected under the following circumstances:
+### read() Method
+- `data` attribute is populated after `read()`.
+- `data` attribute was empty before `read()`.
+- `data` attribute is populated with an `h5py.File` object after `read()`.
+- attempting to read a non-existent file will raise a `FileNotFoundError` and logs an exception as an "ERROR" with the message "File not found."
+- attempting to read a non-HDF5 file will raise a `OSError` and logs an exception as an "ERROR" with the message "File not readable."
+- attempting to read a file if the `data` attribute has already been populated raises a `ValueError` and logs an exception as an "ERROR" with the message "File has already been read."
+
+
