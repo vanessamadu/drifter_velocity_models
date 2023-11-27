@@ -190,7 +190,7 @@ class TestHDF5ManagerWrite:
     
     # Define test methods
 
-    def data_attribute_updated_after_write(self, set_up_existing_file):
+    def test_data_attribute_updated_after_write(self, set_up_existing_file):
 
         """Test that the data attribute is updated after writing."""
 
@@ -204,6 +204,75 @@ class TestHDF5ManagerWrite:
         assert 'new_dataset' in manager.data['/test_group']
         assert np.array_equal(manager.data['/test_group']['new_dataset'], [5, 6, 7])
 
+    def test_data_attribute_was_not_none_before_write(self, set_up_existing_file):
+
+        """Test that the data attribute was not None before writing."""
+
+        # Setup
+        file_path = set_up_existing_file
+        # Exercise
+        manager = HDF5Manager(file_path = file_path,mode = 'w',read_only = False,archive_status = False)
+        manager.read()
+        # Verify
+        assert manager.data is not None
+
+    ## overwrite tests
+
+    def test_overwrite_when_overwrite_false_raises_ValueError_and_logs_exception(self,caplog,set_up_existing_file):
+
+        """Test that writing a dataset with the same name as an existing dataset 
+        when overwrite is False raises ValueError and logs the exception."""
+
+        # Setup
+        file_path = set_up_existing_file
+        # Exercise
+        manager = HDF5Manager(file_path = file_path,mode = 'w',read_only = False,archive_status = False)
+        manager.read()
+        # Verify
+        with pytest.raises(ValueError,match="Dataset name already exists in group."):
+            manager.write('/test_group','test_dataset', data = [1,2,3])
+        assert "Dataset name already exists in group." in caplog.text
+        assert "ERROR" in caplog.text
+
+    def test_overwrite_when_overwrite_true_overwrites_existing_dataset(self, set_up_existing_file):
+
+        """Test that writing a dataset with the same name as an existing dataset 
+        when overwrite is True overwrites the existing dataset."""
+
+        # Setup
+        file_path = set_up_existing_file
+        # Exercise
+        manager = HDF5Manager(file_path = file_path,mode = 'w',read_only = False,archive_status = False)
+        manager.read()
+        manager.write('/test_group','test_dataset', data = [5,6,7], overwrite = True)
+        assert np.array_equal(manager.data['/test_group']['test_dataset'], [5, 6, 7])
+
+    ## group path tests
+
+    def test_invalid_group_path_name(self, set_up_existing_file, set_up_group_path_with_invalid_characters, set_up_empty_group_path, set_up_group_path_with_invalid_type,caplog):
+
+        """Test that writing to a group path with invalid characters raises ValueError."""
+
+        # Setup
+        file_path = set_up_existing_file
+        invalid_char_group_path = set_up_group_path_with_invalid_characters
+        invalid_type_group_path = set_up_group_path_with_invalid_type
+        empty_group_path = set_up_empty_group_path
+        # Exercise
+        manager = HDF5Manager(file_path = file_path,mode = 'w',read_only = False,archive_status = False)
+        manager.read()
+        # Verify
+        with pytest.raises(ValueError,match="Group path contains invalid characters."):
+            manager.write(invalid_char_group_path,'new_dataset', data = [5,6,7])
+            assert "Invalid characters in group path." in caplog.text
+        with pytest.raises(ValueError,match="Group path must be a string."):
+            manager.write(invalid_type_group_path,'new_dataset', data = [5,6,7])
+            assert "Invalid group path type." in caplog.text
+        with pytest.raises(ValueError,match="Group path cannot be empty."):
+            manager.write(empty_group_path,'new_dataset', data = [5,6,7])
+            assert "Group path cannot be empty." in caplog.text
+
+    
 
 
         
