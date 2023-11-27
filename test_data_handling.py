@@ -271,7 +271,113 @@ class TestHDF5ManagerWrite:
         with pytest.raises(ValueError,match="Group path cannot be empty."):
             manager.write(empty_group_path,'new_dataset', data = [5,6,7])
             assert "Group path cannot be empty." in caplog.text
+    
+    def test_write_to_non_existent_group_path_new_group_false_raises_KeyError_and_logs_exception(self,caplog,set_up_existing_file,set_up_non_existent_group_path):
 
+        """Test that writing to a non-existent group path when new_group is False 
+        raises KeyError and logs the exception."""
+
+        # Setup
+        file_path = set_up_existing_file
+        non_existent_group_path = set_up_non_existent_group_path
+        # Exercise
+        manager = HDF5Manager(file_path = file_path,mode = 'w',read_only = False,archive_status = False)
+        manager.read()
+        # Verify
+        with pytest.raises(KeyError,match="Group path does not exist."):
+            manager.write(non_existent_group_path,'new_dataset', data = [5,6,7])
+        assert "Group path does not exist." in caplog.text
+        assert "ERROR" in caplog.text
+
+    def test_write_to_non_existent_group_path_new_group_true_creates_new_group(self, set_up_existing_file, set_up_non_existent_group_path):
+
+        """Test that writing to a non-existent group path when new_group is True 
+        creates a new group."""
+
+        # Setup
+        file_path = set_up_existing_file
+        non_existent_group_path = set_up_non_existent_group_path
+        # Exercise
+        manager = HDF5Manager(file_path = file_path,mode = 'w',read_only = False,archive_status = False)
+        manager.read()
+        manager.write(non_existent_group_path,'new_dataset', data = [5,6,7], new_group = True)
+        # Verify
+        assert 'new_dataset' in manager.data['/non_existent_group_path']
+        assert np.array_equal(manager.data['/non_existent_group_path']['new_dataset'], [5, 6, 7])
+
+    ## dataset tests
+
+    def test_invalid_dataset_name(self, set_up_existing_file, set_up_dataset_name_with_invalid_characters, set_up_empty_dataset_name, set_up_dataset_name_with_invalid_type,caplog):
+
+        """ Test that writing to a dataset with invalid name raises ValueError"""
+        
+        # Setup
+        file_path = set_up_existing_file
+        invalid_char_dataset_name = set_up_dataset_name_with_invalid_characters
+        invalid_type_dataset_name = set_up_dataset_name_with_invalid_type
+        empty_dataset_name = set_up_empty_dataset_name
+        # Exercise
+        manager = HDF5Manager(file_path = file_path,mode = 'w',read_only = False,archive_status = False)
+        manager.read()
+        # Verify
+        with pytest.raises(ValueError,match="Dataset name contains invalid characters."):
+            manager.write('/test_group',invalid_char_dataset_name, data = [5,6,7])
+            assert "Invalid characters in dataset name." in caplog.text
+        with pytest.raises(ValueError,match="Dataset name must be a string."):
+            manager.write('/test_group',invalid_type_dataset_name, data = [5,6,7])
+            assert "Invalid dataset name type." in caplog.text
+        with pytest.raises(ValueError,match="Dataset name cannot be empty."):
+            manager.write('/test_group',empty_dataset_name, data = [5,6,7])
+            assert "Dataset name cannot be empty." in caplog.text
+
+    def test_write_an_empty_or_none_dataset_raises_ValueError_and_logs_exception(self,caplog,set_up_existing_file):
+
+        """Test that writing an empty or None dataset raises ValueError and logs the exception."""
+
+        # Setup
+        file_path = set_up_existing_file
+        empty_dataset = []
+        none_dataset = None
+        # Exercise
+        manager = HDF5Manager(file_path = file_path,mode = 'w',read_only = False,archive_status = False)
+        manager.read()
+        # Verify
+        with pytest.raises(ValueError,match="Dataset cannot be empty."):
+            manager.write('/test_group','new_dataset', data = empty_dataset)
+            assert "Dataset cannot be empty." in caplog.text
+        with pytest.raises(ValueError,match="Dataset cannot be empty."):
+            manager.write('/test_group','new_dataset', data = none_dataset)
+            assert "Dataset cannot be empty." in caplog.text
+
+    ## other tests
+
+    def test_writing_with_insufficient_permissions_raises_PermissionError_and_logs_exception(self,caplog,set_up_existing_file):
+
+        """Test that writing with insufficient permissions raises PermissionError and logs the exception."""
+
+        # Setup
+        file_path = set_up_existing_file
+        # Exercise
+        manager = HDF5Manager(file_path = file_path,mode = 'r',read_only = False,archive_status = False)
+        # Verify
+        with pytest.raises(PermissionError):
+            manager.write('/test_group','new_dataset', data = [5,6,7])
+        assert "Insufficient permissions." in caplog.text
+        assert "ERROR" in caplog.text
+
+    def test_write_to_non_readable_mode_raises_ValueError_and_logs_exception(self,caplog,set_up_existing_file):
+
+        """Test that writing to a file with non-readable mode raises ValueError and logs the exception."""
+
+        # Setup
+        file_path = set_up_existing_file
+        # Exercise
+        manager = HDF5Manager(file_path = file_path,mode = 'r',read_only = True,archive_status = False)
+        # Verify
+        with pytest.raises(ValueError, match = 'File is not in append or write mode.'):
+            manager.write('/test_group','new_dataset', data = [5,6,7])
+        assert "File not writable." in caplog.text
+        assert "ERROR" in caplog.text
     
 
 
