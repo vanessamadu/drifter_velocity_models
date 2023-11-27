@@ -66,14 +66,14 @@ class HDF5Manager:
             - FileNotFoundError: If file path does not exist.
         '''
         if not isinstance(self.file_path, str):
-            logging.error("Invalid file path type.")
+            logging.error("File path must be a string.")
             raise ValueError("File path must be a string.")
         if not self.file_path:
             logging.error("File path cannot be empty.")
             raise ValueError("File path cannot be empty.")
         invalid_chars = set('<>:\"/\\|?* ')
         if any(char in invalid_chars for char in self.file_path):
-            logging.error("Invalid characters in file path.")
+            logging.error("File path contains invalid characters.")
             raise ValueError("File path contains invalid characters.")
         if not os.path.exists(self.file_path):
             logging.error("File not found.")
@@ -87,7 +87,7 @@ class HDF5Manager:
             - ValueError: If mode is not 'r', 'w', or 'a'.
         '''
         if self.mode not in ['r','w','a']:
-            logging.error("Invalid mode.")
+            logging.error("Mode must be 'r', 'w', or 'a'.")
             raise ValueError("Mode must be 'r', 'w', or 'a'.")
     
     def __check_group_path(self,group_path):
@@ -104,14 +104,14 @@ class HDF5Manager:
                 - If group path contains invalid characters.
         '''
         if not isinstance(group_path, str):
-            logging.error("Invalid group path type.")
+            logging.error("Group path must be a string.")
             raise ValueError("Group path must be a string.")
         if not group_path:
             logging.error("Group path cannot be empty.")
             raise ValueError("Group path cannot be empty.")
         invalid_chars = set('<>:\"/\\|?* ')
         if any(char in invalid_chars for char in group_path):
-            logging.error("Invalid characters in group path.")
+            logging.error("Group path contains invalid characters.")
             raise ValueError("Group path contains invalid characters.")
 
     def __check_dataset_name(self,dataset_name):
@@ -128,14 +128,14 @@ class HDF5Manager:
                 - If dataset name contains invalid characters.
         '''
         if not isinstance(dataset_name, str):
-            logging.error("Invalid dataset name type.")
+            logging.error("Dataset name must be a string.")
             raise ValueError("Dataset name must be a string.")
         if not dataset_name:
             logging.error("Dataset name cannot be empty.")
             raise ValueError("Dataset name cannot be empty.")
         invalid_chars = set('<>:\"/\\|?* ')
         if any(char in invalid_chars for char in dataset_name):
-            logging.error("Invalid characters in dataset name.")
+            logging.error("Dataset name contains invalid characters.")
             raise ValueError("Dataset name contains invalid characters.")
     
     ## init checks
@@ -199,10 +199,10 @@ class HDF5Manager:
         '''
         # Check validity of parameters
         if self.mode not in ['a','w']:
-            logging.error("File not writable.")
+            logging.error("File is not in append or write mode.")
             raise ValueError("File is not in append or write mode.")
         if dataset is None or dataset == []:
-            logging.error("Invalid dataset.")
+            logging.error("Dataset is empty.")
             raise ValueError("Dataset is empty.")
         self.__check_group_path(group_path)
         self.__check_dataset_name(dataset_name)
