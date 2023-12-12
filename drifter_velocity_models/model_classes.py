@@ -24,10 +24,11 @@ class Model:
         self.loss_type = loss_type # specify loss function
         self.training_data = training_data # data as pd dataframe
         self.test_data = test_data # data as pd dataframe
+        self.model_type = None
     
     def __str__(self):
         ''' if a model is operated on by the string operator, it returns a description of the model'''
-        return f"Ocean drifter model with type: loss: {self.loss_type}, class: {type(self)}"
+        return f"Ocean drifter model with type: {self.model_type} loss: {self.loss_type}, class: {type(self)}"
 
     #++++++++++++++++++++++++ STATIC METHODS ++++++++++++++++++++++++++++#
     #------------------------ loss functions -------------------------#
