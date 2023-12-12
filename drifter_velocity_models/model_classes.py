@@ -27,7 +27,7 @@ class Model:
     
     def __str__(self):
         ''' if a model is operated on by the string operator, it returns a description of the model'''
-        return f"Ocean drifter model with type: {self.model_type}, loss: {self.loss_type}, class: {type(self)}"
+        return f"Ocean drifter model with type: loss: {self.loss_type}, class: {type(self)}"
 
     #++++++++++++++++++++++++ STATIC METHODS ++++++++++++++++++++++++++++#
     #------------------------ loss functions -------------------------#
@@ -80,7 +80,7 @@ class Model:
     @property
     def loss_type(self):
         '(setter) loss type which acts as a dict key to assign appropriate loss function'
-        return self._loss_types
+        return self._loss_type
     
     @property
     def training_data(self):
