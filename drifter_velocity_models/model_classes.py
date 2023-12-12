@@ -42,26 +42,39 @@ class Model:
         [array] obs: array of velocity observations
         [array] preds: array of predicted velocities
         '''
-        errs,speed_errs,dir_errs = __class__.prediction_errors(obs,preds)
-        return linalg.norm(speed_errs)/np.sqrt(len(speed_errs)), linalg.norm(dir_errs)/np.sqrt(len(dir_errs))
+        speed_errs,dir_errs = __class__.spped_dir_prediction_errors(__class__.velocity_prediction_errors(obs,preds))
+        return [linalg.norm(speed_errs)/np.sqrt(len(speed_errs)), linalg.norm(dir_errs)/np.sqrt(len(dir_errs))]
     
     #------------------------ error analysis --------------------------#
     ''' these methods define methods used for analysis of residuals'''
 
     @staticmethod
-    def prediction_errors(obs,preds):
+    def velocity_prediction_errors(obs,preds):
         '''
-        returns: prediction errors for velocity, speed, and direction for each prediction the model makes
-
-        params:
+        params: 
         [array] obs: array of velocity observations
         [array] preds: array of predicted velocities
         '''
-        errs = [x-x_pred for x,x_pred in zip(obs,preds)]
+        return [x-x_pred for x,x_pred in zip(obs,preds)]
+    
+    @staticmethod
+    def speed_dir_prediction_errors(errs):
+        '''
+        returns: prediction errors for speed, and direction for each prediction the model makes
+
+        params:
+        [array] errs: velocity prediction errors
+        '''
         speed_errs = [linalg.norm(err) for err in errs]
         dir_errs = [np.abs(np.arctan(err)) for err in errs]
 
-        return errs,speed_errs,dir_errs
+        return [speed_errs,dir_errs]
+    
+    @staticmethod
+    def calculate_loss(obs,preds,loss_function):
+        loss = np.multiply([100,180/math.pi],loss_function(obs,preds))
+        return loss
+
 
     #++++++++++++++++++++++ MODEL PROPERTIES AND SETTERS +++++++++++++++++++++#
     # -------------------- properties ---------------------#
@@ -104,11 +117,17 @@ class Model:
         'changes the value of the test_data property'
         self._test_data = data_subset
     
-
-    
- 
-
     #++++++++++++++++++++++ CLASS VARIABLES +++++++++++++++++++++++++++#
 
     #===== permitted loss functions =====#
     loss_functions = {'rmse':rmse}
+
+    #++++++++++++++++++++++ INSTANCE METHODS ++++++++++++++++++++++++++#
+
+    def calculate_loss(self):
+        'calculate and return loss'
+        train_loss = self.loss_function(obs=np.array(self.training_data["u_av","v_av"]),
+                                        preds=self.trained_prediction)
+        train_loss[0]*=100 # convert to cm/s
+        train_loss[1]*=180/math.pi #convert to degrees
+        return train_loss
