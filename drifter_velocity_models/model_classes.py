@@ -75,7 +75,6 @@ class Model:
         loss = np.multiply([100,180/math.pi],loss_function(obs,preds))
         return loss
 
-
     #++++++++++++++++++++++ MODEL PROPERTIES AND SETTERS +++++++++++++++++++++#
     # -------------------- properties ---------------------#
     @property
@@ -124,10 +123,14 @@ class Model:
 
     #++++++++++++++++++++++ INSTANCE METHODS ++++++++++++++++++++++++++#
 
-    def calculate_loss(self):
-        'calculate and return loss'
-        train_loss = self.loss_function(obs=np.array(self.training_data["u_av","v_av"]),
-                                        preds=self.trained_prediction)
-        train_loss[0]*=100 # convert to cm/s
-        train_loss[1]*=180/math.pi #convert to degrees
-        return train_loss
+    def train_loss(self):
+        'calculate and return training loss'
+        obs = np.array(self.training_data["u_av","v_av"])
+        pred = self.trained_prediction
+        return self.calculate_loss(obs,pred)
+    
+    def test_loss(self):
+        'calculate and return test loss'
+        obs = np.array(self.test_data["u_av","v_av"])
+        pred = self.testing_prediction
+        return self.calculate_loss(obs,pred)
