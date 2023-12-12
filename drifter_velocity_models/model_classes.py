@@ -63,6 +63,37 @@ class Model:
         return errs,speed_errs,dir_errs
 
     #++++++++++++++++++++++ MODEL PROPERTIES AND SETTERS +++++++++++++++++++++#
+    # -------------------- properties ---------------------#
+    @property
+    def loss_type(self):
+        '(setter) loss type which acts as a dict key to assign appropriate loss function'
+        return self._loss_types
+    
+    @property
+    def dataset(self):
+        '(setter) full dataset'
+        return self._dataset
+    
+    @property
+    def training_data(self):
+        '(setter) data used to train'
+        return self._training_data
+    
+    @property
+    def test_data(self):
+        '(setter) data used to test'
+        return self._test_data
+    #========== 'immutable' properties ==========#
+    @property
+    def loss_function(self):
+        '(no setter) assigns appropriate loss function according to loss_type'
+        return self.loss_functions[self.loss_type]
+    
+    
+    
+
+    
+ 
 
     #++++++++++++++++++++++ CLASS VARIABLES +++++++++++++++++++++++++++#
 
