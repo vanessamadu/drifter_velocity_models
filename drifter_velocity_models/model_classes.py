@@ -20,17 +20,33 @@ class Model:
     and it will define attributes and methods common to all specific model classes.
     '''
     #==== magic methods ====#
-    def __init__(self, loss_type,data):
+    def __init__(self, loss_type,full_dataset):
         self.loss_type = loss_type # specify loss function
-        self.data = data # data as pd dataframe
+        self.dataset = full_dataset # data as pd dataframe
     
     def __str__(self):
         ''' if a model is operated on by the string operator, it returns a description of the model'''
         return f"Ocean drifter model with type: {self.model_type}, loss: {self.loss_type}, class: {type(self)}"
 
+    #++++++++++++++++++++++++ STATIC METHODS ++++++++++++++++++++++++++++#
     #------------------------ loss functions -------------------------#
     ''' these methods define the loss functions used to measure model prediction performance'''
     
+    @staticmethod
+    def rmse(obs,preds):
+        '''
+        returns: root mean square error (rmse) over all the predictions made by the model.
+
+        params: 
+        [array] obs: array of velocity observations
+        [array] preds: array of predicted velocities
+        '''
+        errs,speed_errs,dir_errs = __class__.prediction_errors(obs,preds)
+        return linalg.norm(speed_errs)/np.sqrt(len(speed_errs)), linalg.norm(dir_errs)/np.sqrt(len(dir_errs))
+    
+    #------------------------ error analysis --------------------------#
+    ''' these methods define methods used for analysis of residuals'''
+
     @staticmethod
     def prediction_errors(obs,preds):
         '''
@@ -45,15 +61,10 @@ class Model:
         dir_errs = [np.abs(np.arctan(err)) for err in errs]
 
         return errs,speed_errs,dir_errs
-    
-    @staticmethod
-    def rmse(obs,preds):
-        '''
-        returns: root mean square error (rmse) over all the predictions made by the model.
 
-        params: 
-        [array] obs: array of velocity observations
-        [array] preds: array of predicted velocities
-        '''
-        errs,speed_errs,dir_errs = __class__.prediction_errors(obs,preds)
-        return linalg.norm(speed_errs)/np.sqrt(len(speed_errs)), linalg.norm(dir_errs)/np.sqrt(len(dir_errs))
+    #++++++++++++++++++++++ MODEL PROPERTIES AND SETTERS +++++++++++++++++++++#
+
+    #++++++++++++++++++++++ CLASS VARIABLES +++++++++++++++++++++++++++#
+
+    #===== permitted loss functions =====#
+    loss_functions = {'rmse':rmse}
