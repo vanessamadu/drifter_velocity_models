@@ -1,6 +1,6 @@
 'description: hierarchical model framework for the construction of my ocean drifter velocity model'
 
-####################################### SET UP ##############################################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%% SET UP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
 ##### import packages #####
 import numpy as np
 from numpy import linalg
@@ -13,17 +13,35 @@ import matplotlib.pyplot as plt
 ##### load data #####
 data = pd.read_hdf("ocean_data.h5")
 
-####################################### MODEL CLASS ##########################################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%% MODEL CLASS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
 class Model:
     '''
     this class will be the parent class of all ocean models that we will be using
     and it will define attributes and methods common to all specific model classes.
     '''
-    ## magic methods ##
+    #==== magic methods ====#
     def __init__(self, loss_type,data):
         self.loss_type = loss_type # specify loss function
         self.data = data # data as pd dataframe
     
     def __str__(self):
         ''' if a model is operated on by the string operator, it returns a description of the model'''
-        return f"Ocean drifter model with type: {self.model_type}, loss: {self.loss_type}, class: {type(self)}"       
+        return f"Ocean drifter model with type: {self.model_type}, loss: {self.loss_type}, class: {type(self)}"
+
+    #------------------------ loss functions -------------------------#
+    ''' these methods define the loss functions used to measure model prediction performance'''
+    
+    @staticmethod
+    def prediction_errors(obs,preds):
+        '''
+        returns: prediction errors for velocity, speed, and direction for each prediction the model makes
+
+        params:
+        [array] obs: array of velocity observations
+        [array] preds: array of predicted velocities
+        '''
+        errs = [x-x_pred for x,x_pred in zip(obs,preds)]
+        speed_errs = [linalg.norm(err) for err in errs]
+        dir_errs = [np.abs(np.arctan(err)) for err in errs]
+
+        return errs,speed_errs,dir_errs
