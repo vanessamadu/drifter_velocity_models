@@ -45,3 +45,15 @@ class Model:
         dir_errs = [np.abs(np.arctan(err)) for err in errs]
 
         return errs,speed_errs,dir_errs
+    
+    @staticmethod
+    def rmse(obs,preds):
+        '''
+        returns: root mean square error (rmse) over all the predictions made by the model.
+
+        params: 
+        [array] obs: array of velocity observations
+        [array] preds: array of predicted velocities
+        '''
+        errs,speed_errs,dir_errs = __class__.prediction_errors(obs,preds)
+        return linalg.norm(speed_errs)/np.sqrt(len(speed_errs)), linalg.norm(dir_errs)/np.sqrt(len(dir_errs))
