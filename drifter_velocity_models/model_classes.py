@@ -20,9 +20,10 @@ class Model:
     and it will define attributes and methods common to all specific model classes.
     '''
     #==== magic methods ====#
-    def __init__(self, loss_type,full_dataset):
+    def __init__(self, loss_type,training_data,test_data):
         self.loss_type = loss_type # specify loss function
-        self.dataset = full_dataset # data as pd dataframe
+        self.training_data = training_data # data as pd dataframe
+        self.test_data = test_data # data as pd dataframe
     
     def __str__(self):
         ''' if a model is operated on by the string operator, it returns a description of the model'''
@@ -70,11 +71,6 @@ class Model:
         return self._loss_types
     
     @property
-    def dataset(self):
-        '(setter) full dataset'
-        return self._dataset
-    
-    @property
     def training_data(self):
         '(setter) data used to train'
         return self._training_data
@@ -89,7 +85,24 @@ class Model:
         '(no setter) assigns appropriate loss function according to loss_type'
         return self.loss_functions[self.loss_type]
     
+    # --------------------- setters ------------------------ #
+    @loss_type.setter
+    def loss_type(self,loss_type_name):
+            'checks that loss_type is valid'
+            if loss_type_name not in self.loss_functions.keys():
+                raise ValueError("loss type not in permitted loss functions")
+            else:
+                self._loss_type = loss_type_name    
     
+    @training_data.setter
+    def training_data(self,data_subset):
+        'changes the value of the training_data property'
+        self._training_data = data_subset
+
+    @test_data.setter
+    def test_data(self,data_subset):
+        'changes the value of the test_data property'
+        self._test_data = data_subset
     
 
     
