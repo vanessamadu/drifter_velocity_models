@@ -28,8 +28,8 @@ class BathtubModel(Model):
     
     @property
     def trained_prediction(self):
-        return [self.model_function(lon,lat) for lon,lat in self.training_data["lon","lat"]]
+        return [self.model_function(lon,lat) for lon,lat in self.training_data[["lon","lat"]]]
     
     @property
     def testing_prediction(self):
-        return [self.model_function(lon,lat) for lon,lat in self.training_data["lon","lat"]]
+        return [self.model_function(lon,lat) for lon,lat in self.training_data[["lon","lat"]]]
