@@ -43,7 +43,7 @@ class Model:
         [array] obs: array of velocity observations
         [array] preds: array of predicted velocities
         '''
-        speed_errs,dir_errs = __class__.spped_dir_prediction_errors(__class__.velocity_prediction_errors(obs,preds))
+        speed_errs,dir_errs = __class__.speed_dir_prediction_errors(__class__.velocity_prediction_errors(obs,preds))
         return [linalg.norm(speed_errs)/np.sqrt(len(speed_errs)), linalg.norm(dir_errs)/np.sqrt(len(dir_errs))]
     
     #------------------------ error analysis --------------------------#
@@ -146,10 +146,10 @@ class Model:
         'calculate and return training loss'
         obs = np.array(self.training_data[["u_av","v_av"]])
         pred = self.trained_prediction
-        return self.calculate_loss(obs,pred)
+        return self.calculate_loss(obs,pred,self.loss_function)
     
     def test_loss(self):
         'calculate and return test loss'
         obs = np.array(self.test_data[["u_av","v_av"]])
         pred = self.testing_prediction
-        return self.calculate_loss(obs,pred)
+        return self.calculate_loss(obs,pred,self.loss_function)
