@@ -20,7 +20,7 @@ class Model:
     and it will define attributes and methods common to all specific model classes.
     '''
     #==== magic methods ====#
-    def __init__(self, loss_type,training_data,test_data):
+    def __init__(self, loss_type:str,training_data,test_data):
         self.loss_type = loss_type # specify loss function
         self.training_data = training_data # data as pd dataframe
         self.test_data = test_data # data as pd dataframe
