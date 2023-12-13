@@ -19,3 +19,17 @@ class BathtubModel(Model):
         __class__.check_coordinates(lon,lat)
         return np.zeros(2)
     
+    #++++++++++++++++++++++ MODEL PROPERTIES AND SETTERS +++++++++++++++++++++#
+    #========== 'immutable' properties ==========#
+
+    @property
+    def model_function(self):
+        return self.bathtub
+    
+    @property
+    def trained_prediction(self):
+        return [self.model_function(lon,lat) for lon,lat in self.training_data["lon","lat"]]
+    
+    @property
+    def testing_prediction(self):
+        return [self.model_function(lon,lat) for lon,lat in self.training_data["lon","lat"]]
