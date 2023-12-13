@@ -2,7 +2,6 @@ from model_classes import Model
 # import packages
 import numpy as np
 
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%% BATHTUB MODEL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
 class BathtubModel(Model):
     '''benchmark model - predicts all velocities to be zero at all positions and for all times.'''
     
@@ -29,8 +28,6 @@ class BathtubModel(Model):
     def testing_prediction(self):
         return [self.model_function(lon,lat) for lon,lat in np.array(self.training_data[["lon","lat"]])]
 
-
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%% SBR MODEL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
 class SBRModel(Model):
     '''benchmark model: predicts velocities according to a steady solid body rotation model.'''
 

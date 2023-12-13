@@ -13,7 +13,6 @@ import matplotlib.pyplot as plt
 ##### load data #####
 data = pd.read_hdf("ocean_data.h5")
 
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%% MODEL CLASS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
 class Model:
     '''
     this class will be the parent class of all ocean models that we will be using
