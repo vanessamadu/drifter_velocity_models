@@ -8,3 +8,5 @@ class BathtubModel(Model):
     def __init__(self, loss_type,training_data,test_data):
         super().__init__(loss_type,training_data,test_data)
         self.model_type = "bathtub"
+
+    

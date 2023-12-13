@@ -75,6 +75,26 @@ class Model:
     def calculate_loss(obs,preds,loss_function):
         loss = np.multiply([100,180/math.pi],loss_function(obs,preds))
         return loss
+    
+    # -------------------- validation -------------------- #
+    
+    ''' these methods are used for widespread validation'''
+
+    @staticmethod
+    def check_coordinates(lon,lat):
+        limits = {"lat":90,"lon":180}
+        values = {"lat":lat,"lon":lon}
+
+        for coord in values.keys():
+            try:
+                float(values[coord])
+            except:
+                raise ValueError(f"{coord} must be a real number")
+            finally:
+                if np.abs(values[coord])>limits[coord]:
+                    raise ValueError(f"{coord} must be between -{limits[coord]} and {limits[coord]}")
+
+        
 
     #++++++++++++++++++++++ MODEL PROPERTIES AND SETTERS +++++++++++++++++++++#
     # -------------------- properties ---------------------#
