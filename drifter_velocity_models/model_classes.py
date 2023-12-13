@@ -81,8 +81,8 @@ class Model:
     ''' these methods are used for widespread validation'''
 
     @staticmethod
-    def check_coordinates(lon,lat):
-        limits = {"lat":90,"lon":180}
+    def check_coordinates(lon:float,lat:float):
+        limits = {"lat":90.,"lon":180.}
         values = {"lat":lat,"lon":lon}
 
         for coord in values.keys():
