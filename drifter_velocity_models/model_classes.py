@@ -19,7 +19,6 @@ class Model:
     this class will be the parent class of all ocean models that we will be using
     and it will define attributes and methods common to all specific model classes.
     '''
-    #==== magic methods ====#
     def __init__(self, loss_type:str,training_data,test_data):
         self.loss_type = loss_type # specify loss function
         self.training_data = training_data # data as pd dataframe
@@ -110,7 +109,8 @@ class Model:
     def test_data(self):
         '(setter) data used to test'
         return self._test_data
-    #========== 'immutable' properties ==========#
+    
+    #---- 'immutable' properties ----#
     @property
     def loss_function(self):
         '(no setter) assigns appropriate loss function according to loss_type'
@@ -137,7 +137,6 @@ class Model:
     
     #++++++++++++++++++++++ CLASS VARIABLES +++++++++++++++++++++++++++#
 
-    #===== permitted loss functions =====#
     loss_functions = {'rmse':rmse}
 
     #++++++++++++++++++++++ INSTANCE METHODS ++++++++++++++++++++++++++#
