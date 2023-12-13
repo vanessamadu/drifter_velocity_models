@@ -34,24 +34,31 @@ class BathtubModel(Model):
 class SBRModel(Model):
     '''benchmark model: predicts velocities according to a steady solid body rotation model.'''
 
-    def __init__(self,loss_type:str,training_data,test_data,f0:float):
+    def __init__(self,loss_type:str,training_data,test_data):
         super().__init__(loss_type,training_data,test_data)
-        self.f0 = f0 # coriolis parameter
+        self.f0 = 0.727e-4 # coriolis parameter at 30 degrees N
         self.model_type = 'sbr'
 
     #------------------------ model constructions -------------------------#
     @staticmethod
     def sbr(lon:float,lat:float,f0:float):
         __class__.check_coordinates(lon,lat)
-
-        try:
-            float(f0)
-        except:
-            raise ValueError("coriolis parameter, f0, must be a real number")
         
         return np.array([-f0*lat,f0*lon])
-
-    #----------------------- 'immutable' properties -----------------------#
+    # -------------------------properties and setters ------------------------------#
+    @property
+    def f0(self):
+        return self._f0
+    
+    @f0.setter
+    def f0(self,val):
+        try:
+            float(val)
+        except:
+            raise ValueError("coriolis parameter, f0, must be a real number")
+        self._f0 = val
+        
+    # -----------'immutable' properties -----------#
     @property
     def model_function(self):
         return self.sbr
@@ -63,3 +70,4 @@ class SBRModel(Model):
     @property
     def testing_prediction(self):
         return [self.model_function(lon,lat,self.f0) for lon,lat in np.array(self.test_data[["lon","lat"]])]
+
