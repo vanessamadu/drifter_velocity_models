@@ -36,7 +36,7 @@ class SBRModel(Model):
 
     def __init__(self,loss_type:str,training_data,test_data):
         super().__init__(loss_type,training_data,test_data)
-        self.f0 = 0.727e-4 # coriolis parameter at 30 degrees N
+        self.f0 = 7.27e-5 # coriolis parameter at 30 degrees N
         self.model_type = 'sbr'
 
     #------------------------ model constructions -------------------------#
@@ -57,7 +57,7 @@ class SBRModel(Model):
         except:
             raise ValueError("coriolis parameter, f0, must be a real number")
         self._f0 = val
-        
+
     # -----------'immutable' properties -----------#
     @property
     def model_function(self):
