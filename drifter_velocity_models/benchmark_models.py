@@ -1,4 +1,6 @@
 from model_classes import Model
+# import packages
+import numpy as np
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%% BATHTUB MODEL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
 class BathtubModel(Model):
@@ -9,4 +11,11 @@ class BathtubModel(Model):
         super().__init__(loss_type,training_data,test_data)
         self.model_type = "bathtub"
 
+    #++++++++++++++++++++++++ STATIC METHODS ++++++++++++++++++++++++++++# 
+    #------------------------ model constructions -------------------------#
+
+    @staticmethod
+    def bathtub(lon,lat):
+        __class__.check_coordinates(lon,lat)
+        return np.zeros(2)
     

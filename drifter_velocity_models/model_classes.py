@@ -94,8 +94,6 @@ class Model:
                 if np.abs(values[coord])>limits[coord]:
                     raise ValueError(f"{coord} must be between -{limits[coord]} and {limits[coord]}")
 
-        
-
     #++++++++++++++++++++++ MODEL PROPERTIES AND SETTERS +++++++++++++++++++++#
     # -------------------- properties ---------------------#
     @property
