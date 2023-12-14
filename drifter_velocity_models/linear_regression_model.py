@@ -36,19 +36,8 @@ class LinearRegressionModel(Model):
         lstsq_estimate = linalg.lstsq(self.design,
                                        np.array(self.training_data.loc[:,["u_av","v_av"]]),
                                        rcond=None)
-        return lstsq_estimate[0]
-    
-    @property
-    def param_estimate(self):
-        return self._param_estimate
-    
-    @param_estimate.setter
-    def param_estimate(self):
-        if self.param_estimate is not None:
-            return self.param_estimate
-        else:
-            self.param_estimate = self.calculate_param_estimate()
-            
+        self.param_estimate= lstsq_estimate[0]
+
     #----------------------- 'immutable' properties -----------------------#
     @property
     def model_function(self):
@@ -57,6 +46,8 @@ class LinearRegressionModel(Model):
     @property
     def trained_prediction(self):
         ' return prediction for each vector of covariates for seen data'
+        if self.param_estimate is None:
+            self.calculate_param_estimate()
         pred = self.model_function(self.design,
                                    self.param_estimate)
         return pred
