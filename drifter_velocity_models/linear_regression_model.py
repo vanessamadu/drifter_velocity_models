@@ -41,7 +41,7 @@ class LinearRegressionModel(Model):
     #----------------------- 'immutable' properties -----------------------#
     @property
     def model_function(self):
-        self.lr
+        return self.lr
 
     @property
     def trained_prediction(self):
@@ -57,4 +57,5 @@ class LinearRegressionModel(Model):
         'return prediction for each vector of covariates in test data'
         pred = self.model_function(np.array(self.test_data.loc[:,self.covariate_labels]),
                                    self.param_estimate)
+        return pred
     
