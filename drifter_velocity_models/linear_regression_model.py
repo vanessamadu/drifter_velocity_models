@@ -10,4 +10,12 @@ class LinearRegressionModel(Model):
         self.covariate_labels = covariate_labels
 
     #------------------------ model constructions -------------------------#
-    
+    @staticmethod
+    def lr(X,beta):
+        '''returns a prediction for the linear regression model'''
+        try:
+            pred = np.matmul(X,beta)
+        except:
+            ValueError(f"incompatible dimensions covariates : {X.shape}; parameters: {beta.shape}")
+        
+        return pred
