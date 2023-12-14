@@ -27,13 +27,13 @@ class NGBoostModel(Model):
         if self.model_function is None:
             self.ngboost_pr()
         pred_dist = self.model_function.pred_dist(np.array(self.training_data.loc[:,self.covariate_labels]))
-        self.trained_pred_dist = [pred_dist.loc,pred_dist.cov]
+        self.trained_distribution = [pred_dist.loc,pred_dist.cov]
     
     def test_pred_dist(self):
         if self.model_function is None:
             self.ngboost_pr()
         pred_dist = self.model_function.pred_dist(np.array(self.test_data.loc[:,self.covariate_labels]))
-        self.test_pred_dist = [pred_dist.loc,pred_dist.cov]
+        self.test_distribution = [pred_dist.loc,pred_dist.cov]
 
     #----------------------- 'immutable' properties -----------------------#
     @property
