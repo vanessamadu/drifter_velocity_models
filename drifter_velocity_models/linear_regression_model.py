@@ -48,6 +48,7 @@ class LinearRegressionModel(Model):
             return self.param_estimate
         else:
             self.param_estimate = self.calculate_param_estimate()
+            
     #----------------------- 'immutable' properties -----------------------#
     @property
     def model_function(self):
