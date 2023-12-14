@@ -55,6 +55,8 @@ class LinearRegressionModel(Model):
     @property
     def testing_prediction(self):
         'return prediction for each vector of covariates in test data'
+        if self.param_estimate is None:
+            self.calculate_param_estimate()
         pred = self.model_function(np.array(self.test_data.loc[:,self.covariate_labels]),
                                    self.param_estimate)
         return pred
