@@ -57,7 +57,7 @@ class NGBoostModel(Model):
     def trained_predictions(self,num_pred):
         if self.trained_distribution is None:
             self.trained_pred_dist()
-        self.training_realisations = [distribution.rvs(num_pred) for distribution in self.trained_distribution]
+        self.trained_realisations = [distribution.rvs(num_pred) for distribution in self.trained_distribution]
     
     def testing_predictions(self,num_pred):
         if self.test_distribution is None:
@@ -67,12 +67,12 @@ class NGBoostModel(Model):
     def calculate_trained_prediction(self):
         if self.trained_realisations is None:
             raise AttributeError("no realisations of the trained mvn distribution. First run `self.trained_predictions(num_pred)`.")
-        return np.mean(self.trained_realisations,axis=1)
+        self.trained_prediction = np.mean(self.trained_realisations,axis=1)
 
     def calculate_testing_prediction(self):
         if self.test_realisations is None:
             raise AttributeError("no realisations of the test mvn distribution. First run `self.testing_predictions(num_pred)`.")
-        return np.mean(self.test_realisations,axis=1)
+        self.testing_prediction =  np.mean(self.test_realisations,axis=1)
 
     
 
