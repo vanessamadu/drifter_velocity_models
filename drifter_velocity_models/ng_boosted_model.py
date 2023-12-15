@@ -16,8 +16,11 @@ class NGBoostModel(Model):
         self.test_distribution = None
         self.model_function = None
         # predictions (save for reuse)
-        self.training_predictions = None
-        self.test_predictions = None
+        self.trained_realisations = None
+        self.test_realisations = None
+        ## average of predictions for rmse
+        self.trained_prediction = None
+        self.testing_prediction = None
 
     #------------------------ model constructions -------------------------#
     def ngboost_pr(self):
@@ -48,13 +51,30 @@ class NGBoostModel(Model):
     @num_estimators.setter
     def num_estimators(self,n):
         self._num_estimators = n
+    
+    @property
+    def trained_prediction(self):
+        if self.trained_realisations is None:
+            raise AttributeError("no realisations of the trained mvn distribution. First run `self.trained_predictions(num_pred)`.")
+        return np.mean(self.trained_realisations)
+    
+    @property
+    def testing_prediction(self):
+        if self.test_realisations is None:
+            raise AttributeError("no realisations of the test mvn distribution. First run `self.testing_predictions(num_pred)`.")
+        return np.mean(self.test_realisations)
 
     #----------------------- predictions -----------------------#
     def trained_predictions(self,num_pred):
-        self.training_predictions = self.trained_distribution.rvs(num_pred)
+        if self.trained_distribution is None:
+            self.trained_pred_dist()
+        self.training_realisations = self.trained_distribution.rvs(num_pred)
     
     def testing_predictions(self,num_pred):
-        self.test_predictions = self.test_distribution.rvs(num_pred)
+        if self.test_distribution is None:
+            self.test_pred_dist()
+        self.test_realisations = self.test_distribution.rvs(num_pred)
 
+    
 
     
