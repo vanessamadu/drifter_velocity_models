@@ -35,13 +35,13 @@ class NGBoostModel(Model):
         if self.model_function is None:
             self.ngboost_pr()
         pred_dist = self.model_function.pred_dist(np.array(self.training_data.loc[:,self.covariate_labels]))
-        self.trained_distribution = stats.multivariate_normal(pred_dist.loc,pred_dist.cov)
+        self.trained_distribution =[stats.multivariate_normal(pred_dist.loc[ii,:],pred_dist.cov[ii,:,:]) for ii in range(pred_dist.loc.shape[0])]
     
     def test_pred_dist(self):
         if self.model_function is None:
             self.ngboost_pr()
         pred_dist = self.model_function.pred_dist(np.array(self.test_data.loc[:,self.covariate_labels]))
-        self.test_distribution = stats.multivariate_normal(pred_dist.loc,pred_dist.cov)
+        self.test_distribution = [stats.multivariate_normal(pred_dist.loc[ii,:],pred_dist.cov[ii,:,:]) for ii in range(pred_dist.loc.shape[0])]
 
     #----------------------- 'immutable' properties -----------------------#
     @property
@@ -57,12 +57,12 @@ class NGBoostModel(Model):
     def trained_predictions(self,num_pred):
         if self.trained_distribution is None:
             self.trained_pred_dist()
-        self.training_realisations = self.trained_distribution.rvs(num_pred)
+        self.training_realisations = [distribution.rvs(num_pred) for distribution in self.trained_distribution]
     
     def testing_predictions(self,num_pred):
         if self.test_distribution is None:
             self.test_pred_dist()
-        self.test_realisations = self.test_distribution.rvs(num_pred)
+        self.test_realisations = [distribution.rvs(num_pred) for distribution in self.testing_distribution]
 
     def calculate_trained_prediction(self):
         if self.trained_realisations is None:
