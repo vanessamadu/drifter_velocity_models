@@ -51,20 +51,9 @@ class NGBoostModel(Model):
     @num_estimators.setter
     def num_estimators(self,n):
         self._num_estimators = n
-    
-    @property
-    def trained_prediction(self):
-        if self.trained_realisations is None:
-            raise AttributeError("no realisations of the trained mvn distribution. First run `self.trained_predictions(num_pred)`.")
-        return np.mean(self.trained_realisations)
-    
-    @property
-    def testing_prediction(self):
-        if self.test_realisations is None:
-            raise AttributeError("no realisations of the test mvn distribution. First run `self.testing_predictions(num_pred)`.")
-        return np.mean(self.test_realisations)
 
     #----------------------- predictions -----------------------#
+
     def trained_predictions(self,num_pred):
         if self.trained_distribution is None:
             self.trained_pred_dist()
@@ -74,6 +63,16 @@ class NGBoostModel(Model):
         if self.test_distribution is None:
             self.test_pred_dist()
         self.test_realisations = self.test_distribution.rvs(num_pred)
+
+    def calculate_trained_prediction(self):
+        if self.trained_realisations is None:
+            raise AttributeError("no realisations of the trained mvn distribution. First run `self.trained_predictions(num_pred)`.")
+        return np.mean(self.trained_realisations)
+
+    def calculate_testing_prediction(self):
+        if self.test_realisations is None:
+            raise AttributeError("no realisations of the test mvn distribution. First run `self.testing_predictions(num_pred)`.")
+        return np.mean(self.test_realisations)
 
     
 
