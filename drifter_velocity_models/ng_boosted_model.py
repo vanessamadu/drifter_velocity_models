@@ -2,6 +2,7 @@ from model_classes import Model
 # import packages
 import numpy as np
 import ngboost
+from scipy import stats
 
 class NGBoostModel(Model):
 
@@ -9,10 +10,14 @@ class NGBoostModel(Model):
         super().__init__(loss_type,training_data,test_data)
         self.model_type = "ngboost_pr"
         self.covariate_labels = covariate_labels
-        self.model_function = None
         self.num_estimators = 10
-        self.trained_dist = None
-        self.test_dist = None
+        # model specification
+        self.trained_distribution = None
+        self.test_distribution = None
+        self.model_function = None
+        # predictions (save for reuse)
+        self.training_predictions = None
+        self.test_predictions = None
 
     #------------------------ model constructions -------------------------#
     def ngboost_pr(self):
@@ -27,13 +32,13 @@ class NGBoostModel(Model):
         if self.model_function is None:
             self.ngboost_pr()
         pred_dist = self.model_function.pred_dist(np.array(self.training_data.loc[:,self.covariate_labels]))
-        self.trained_distribution = [pred_dist.loc,pred_dist.cov]
+        self.trained_distribution = stats.multivariate_normal(pred_dist.loc,pred_dist.cov)
     
     def test_pred_dist(self):
         if self.model_function is None:
             self.ngboost_pr()
         pred_dist = self.model_function.pred_dist(np.array(self.test_data.loc[:,self.covariate_labels]))
-        self.test_distribution = [pred_dist.loc,pred_dist.cov]
+        self.test_distribution = stats.multivariate_normal(pred_dist.loc,pred_dist.cov)
 
     #----------------------- 'immutable' properties -----------------------#
     @property
@@ -43,3 +48,13 @@ class NGBoostModel(Model):
     @num_estimators.setter
     def num_estimators(self,n):
         self._num_estimators = n
+
+    #----------------------- predictions -----------------------#
+    def trained_predictions(self,num_pred):
+        self.training_predictions = self.trained_distribution.rvs(num_pred)
+    
+    def testing_predictions(self,num_pred):
+        self.test_predictions = self.test_distribution.rvs(num_pred)
+
+
+    
