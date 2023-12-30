@@ -10,6 +10,7 @@ class LinearRegressionModel(Model):
         self.model_type = "lr"
         self.covariate_labels = covariate_labels
         self.param_estimate = None
+        self.uncertainty_type = "st_resid_err"
 
     #------------------------ model constructions -------------------------#
     @staticmethod

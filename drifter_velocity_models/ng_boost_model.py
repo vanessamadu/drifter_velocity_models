@@ -12,8 +12,6 @@ class NGBoostModel(Model):
         self.covariate_labels = covariate_labels
         self.num_estimators = num_estimators
         # model specification
-        self.trained_distribution = None
-        self.test_distribution = None
         self.model_function = None
         # predictions (save for reuse)
         self.trained_realisations = None

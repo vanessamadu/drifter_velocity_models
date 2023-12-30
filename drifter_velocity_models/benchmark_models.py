@@ -8,6 +8,7 @@ class BathtubModel(Model):
     def __init__(self, loss_type,training_data,test_data):
         super().__init__(loss_type,training_data,test_data)
         self.model_type = "bathtub"
+        self.uncertainty_type = "st_resid_err"
 
     #------------------------ model constructions -------------------------#
     @staticmethod
@@ -35,6 +36,7 @@ class SBRModel(Model):
         super().__init__(loss_type,training_data,test_data)
         self.f0 = 7.27e-5 # coriolis parameter at 30 degrees N
         self.model_type = 'sbr'
+        self.uncertainty_type = "st_resid_err"
 
     #------------------------ model constructions -------------------------#
     @staticmethod
@@ -76,6 +78,7 @@ class FixedCurrentModel(Model):
         super().__init__(loss_type,training_data,test_data)
         self.model_type = "fixedcurrent"
         self.av_drifter_velocity = None
+        self.uncertainty_type = "st_resid_err"
     
     #------------------------ model constructions -------------------------#
     @staticmethod

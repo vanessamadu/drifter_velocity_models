@@ -23,6 +23,9 @@ class Model:
         self.training_data = training_data # data as pd dataframe
         self.test_data = test_data # data as pd dataframe
         self.model_type = None
+        ## for probabilistic regression models
+        self.trained_distribution = None
+        self.test_distribution = None
     
     def __str__(self):
         ''' if a model is operated on by the string operator, it returns a description of the model'''
@@ -43,6 +46,18 @@ class Model:
         '''
         speed_errs,dir_errs = __class__.speed_dir_prediction_errors(__class__.velocity_prediction_errors(obs,preds))
         return [linalg.norm(speed_errs)/np.sqrt(len(speed_errs)), linalg.norm(dir_errs)/np.sqrt(len(dir_errs))]
+    
+    @staticmethod
+    def standard_errors(obs,preds):
+        '''
+        returns: standard error of the residuals for speed and direction.
+        
+        params: 
+        [array] obs: array of velocity observations
+        [array] preds: array of predicted velocities
+        '''
+        speed_errs,dir_errs = __class__.speed_dir_prediction_errors(__class__.velocity_prediction_errors(obs,preds))
+        return [np.std(speed_errs),np.std(dir_errs)]
     
     #------------------------ error analysis --------------------------#
     ''' these methods define methods used for analysis of residuals'''
@@ -68,11 +83,12 @@ class Model:
         dir_errs = [np.abs(np.arctan(err)) for err in errs]
 
         return [speed_errs,dir_errs]
-    
+
     @staticmethod
-    def calculate_loss(obs,preds,loss_function):
+    def calculate_loss(obs,preds,loss_function,uncertainty_function):
         loss = np.multiply([100,180/math.pi],loss_function(obs,preds))
-        return loss
+        uncertainty = np.multiply([100,180/math.pi],uncertainty_function(obs,preds))
+        return loss, uncertainty
     
     # -------------------- validation -------------------- #
     
@@ -100,6 +116,10 @@ class Model:
         return self._loss_type
     
     @property
+    def uncertainty_type(self):
+        return self._uncertainty_type
+    
+    @property
     def training_data(self):
         '(setter) data used to train'
         return self._training_data
@@ -115,7 +135,19 @@ class Model:
         '(no setter) assigns appropriate loss function according to loss_type'
         return self.loss_functions[self.loss_type]
     
+    @property
+    def uncertainty_function(self):
+        return self.uncertainty_functions[self.uncertainty_type]
+    
     # --------------------- setters ------------------------ #
+    @uncertainty_type.setter
+    def uncertainty_type(self,name):
+            'checks that uncertainty_type is valid'
+            if name not in self.uncertainty_functions.keys():
+                raise ValueError("uncertainty type not in permitted uncertainty functions")
+            else:
+                self._uncertainty_type = name
+    
     @loss_type.setter
     def loss_type(self,loss_type_name):
             'checks that loss_type is valid'
@@ -137,6 +169,7 @@ class Model:
     #++++++++++++++++++++++ CLASS VARIABLES +++++++++++++++++++++++++++#
 
     loss_functions = {'rmse':rmse}
+    uncertainty_functions = {'st_resid_err':standard_errors}
 
     #++++++++++++++++++++++ INSTANCE METHODS ++++++++++++++++++++++++++#
 
@@ -144,10 +177,11 @@ class Model:
         'calculate and return training loss'
         obs = np.array(self.training_data[["u","v"]])
         pred = self.trained_prediction
-        return self.calculate_loss(obs,pred,self.loss_function)
+        return self.calculate_loss(obs,pred,self.loss_function,self.uncertainty_function)
     
     def test_loss(self):
         'calculate and return test loss'
         obs = np.array(self.test_data[["u","v"]])
         pred = self.testing_prediction
-        return self.calculate_loss(obs,pred,self.loss_function)
+        return self.calculate_loss(obs,pred,self.loss_function,self.uncertainty_function)
+    
