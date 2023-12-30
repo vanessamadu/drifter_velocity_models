@@ -6,11 +6,11 @@ from scipy import stats
 
 class NGBoostModel(Model):
 
-    def __init__(self,loss_type,training_data,test_data,covariate_labels):
+    def __init__(self,loss_type,training_data,test_data,covariate_labels,num_estimators):
         super().__init__(loss_type,training_data,test_data)
         self.model_type = "ngboost_pr"
         self.covariate_labels = covariate_labels
-        self.num_estimators = 10
+        self.num_estimators = num_estimators
         # model specification
         self.trained_distribution = None
         self.test_distribution = None
@@ -53,7 +53,6 @@ class NGBoostModel(Model):
         self._num_estimators = n
 
     #----------------------- predictions -----------------------#
-
     def trained_predictions(self,num_pred):
         if self.trained_distribution is None:
             self.trained_pred_dist()
