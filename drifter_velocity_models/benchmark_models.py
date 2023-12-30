@@ -68,3 +68,17 @@ class SBRModel(Model):
     def testing_prediction(self):
         return [self.model_function(lon,lat,self.f0) for lon,lat in np.array(self.test_data[["lon","lat"]])]
 
+class FixedCurrentModel(Model):
+    '''benchmark model: predicts all drifter velocities to be the average velocity across the 
+       drifter data'''
+    
+    def __init__(self, loss_type,training_data,test_data):
+        super().__init__(loss_type,training_data,test_data)
+        self.model_type = "fixedcurrent"
+    
+    #------------------------ model constructions -------------------------#
+    
+    @staticmethod
+    def fixedcurrent(lon:float,lat:float,current):
+        __class__.check_coordinates(lon,lat)
+        return current
