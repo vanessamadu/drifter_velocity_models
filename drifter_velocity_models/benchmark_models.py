@@ -85,7 +85,7 @@ class FixedCurrentModel(Model):
     #----------------------- 'immutable' properties -----------------------#
     @property
     def av_drifter_velocity(self):
-        return np.mean(np.array(self.training_data[["u","v"]]),axis=1)
+        return np.mean(np.array(self.training_data[["u","v"]]),axis=0)
     
     @property
     def model_function(self):
