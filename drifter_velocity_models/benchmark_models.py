@@ -77,8 +77,26 @@ class FixedCurrentModel(Model):
         self.model_type = "fixedcurrent"
     
     #------------------------ model constructions -------------------------#
-    
     @staticmethod
     def fixedcurrent(lon:float,lat:float,current):
         __class__.check_coordinates(lon,lat)
         return current
+    
+    #----------------------- 'immutable' properties -----------------------#
+    @property
+    def av_drifter_velocity(self):
+        return np.mean(np.array(self.training_data[["u","v"]]),axis=1)
+    
+    @property
+    def model_function(self):
+        return self.fixedcurrent
+    
+    @property
+    def trained_prediction(self):
+        return [self.model_function(lon,lat,self.av_drifter_velocity)\
+                 for lon,lat in np.array(self.training_data[["lon","lat"]])]
+    
+    @property
+    def testing_prediction(self):
+        return [self.model_function(lon,lat,self.av_drifter_velocity)\
+                 for lon,lat in np.array(self.training_data[["lon","lat"]])]
