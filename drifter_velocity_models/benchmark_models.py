@@ -75,6 +75,7 @@ class FixedCurrentModel(Model):
     def __init__(self, loss_type,training_data,test_data):
         super().__init__(loss_type,training_data,test_data)
         self.model_type = "fixedcurrent"
+        self.av_drifter_velocity = None
     
     #------------------------ model constructions -------------------------#
     @staticmethod
@@ -85,8 +86,15 @@ class FixedCurrentModel(Model):
     #----------------------- 'immutable' properties -----------------------#
     @property
     def av_drifter_velocity(self):
-        return np.mean(np.array(self.training_data[["u","v"]]),axis=0)
+        return self._av_drifter_velocity
     
+    @av_drifter_velocity.setter
+    def av_drifter_velocity(self,val):
+        if val is None:
+            self._av_drifter_velocity = np.mean(np.array(self.training_data[["u","v"]]),axis=0)
+        else:
+            self._av_drifter_velocity = val
+            
     @property
     def model_function(self):
         return self.fixedcurrent
