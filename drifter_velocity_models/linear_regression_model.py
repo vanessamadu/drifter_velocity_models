@@ -34,7 +34,7 @@ class LinearRegressionModel(Model):
     def calculate_param_estimate(self):
         '''returns least squares parameter estimate'''
         lstsq_estimate = linalg.lstsq(self.design,
-                                       np.array(self.training_data.loc[:,["u_av","v_av"]]),
+                                       np.array(self.training_data.loc[:,["u","v"]]),
                                        rcond=None)
         self.param_estimate= lstsq_estimate[0]
 

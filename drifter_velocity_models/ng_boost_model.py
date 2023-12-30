@@ -29,7 +29,7 @@ class NGBoostModel(Model):
                                n_estimators=self.num_estimators)
         
         self.model_function.fit(X=np.array(self.training_data.loc[:,self.covariate_labels]),
-                                   Y=np.array(self.training_data.loc[:,["u_av","v_av"]]))
+                                   Y=np.array(self.training_data.loc[:,["u","v"]]))
     
     def trained_pred_dist(self):
         if self.model_function is None:
