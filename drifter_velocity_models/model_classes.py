@@ -142,12 +142,12 @@ class Model:
 
     def train_loss(self):
         'calculate and return training loss'
-        obs = np.array(self.training_data[["u_av","v_av"]])
+        obs = np.array(self.training_data[["u","v"]])
         pred = self.trained_prediction
         return self.calculate_loss(obs,pred,self.loss_function)
     
     def test_loss(self):
         'calculate and return test loss'
-        obs = np.array(self.test_data[["u_av","v_av"]])
+        obs = np.array(self.test_data[["u","v"]])
         pred = self.testing_prediction
         return self.calculate_loss(obs,pred,self.loss_function)
