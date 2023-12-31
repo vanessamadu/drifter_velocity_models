@@ -93,16 +93,15 @@ class Model:
         return rms_residual_speed, rms_residual_direction
     
     @staticmethod
-    def standard_errors(obs,preds):
+    def standard_error_of_residuals(obs:List[float],preds:list[float]):
         '''
-        returns: standard error of the residuals for speed and direction.
+        returns: returns the standard deviation of the residuals
         
         params: 
-        [array] obs: array of velocity observations
-        [array] preds: array of predicted velocities
+        [array] obs: array of observations
+        [array] preds: array of predictions
         '''
-        speed_errs,dir_errs = __class__.speed_dir_prediction_errors(__class__.residuals(obs,preds))
-        return [np.std(speed_errs),np.std(dir_errs)]
+        return np.std(__class__.residuals(obs,preds))
     
     # -------------------- validation -------------------- #
     
