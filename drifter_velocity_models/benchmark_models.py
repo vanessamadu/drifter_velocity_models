@@ -5,10 +5,9 @@ import numpy as np
 class BathtubModel(Model):
     '''benchmark model - predicts all velocities to be zero at all positions and for all times.'''
     
-    def __init__(self, loss_type,training_data,test_data):
-        super().__init__(loss_type,training_data,test_data)
+    def __init__(self, loss_type, uncertainty_type,training_data,test_data):
+        super().__init__(loss_type,uncertainty_type,training_data,test_data)
         self.model_type = "bathtub"
-        self.uncertainty_type = "st_resid_err"
 
     #------------------------ model constructions -------------------------#
     @staticmethod
@@ -32,11 +31,10 @@ class BathtubModel(Model):
 class SBRModel(Model):
     '''benchmark model: predicts velocities according to a steady solid body rotation model.'''
 
-    def __init__(self,loss_type:str,training_data,test_data):
-        super().__init__(loss_type,training_data,test_data)
+    def __init__(self,loss_type:str,uncertainty_type:str,training_data,test_data):
+        super().__init__(loss_type,uncertainty_type,training_data,test_data)
         self.f0 = 7.27e-5 # coriolis parameter at 30 degrees N
         self.model_type = 'sbr'
-        self.uncertainty_type = "st_resid_err"
 
     #------------------------ model constructions -------------------------#
     @staticmethod
@@ -74,11 +72,10 @@ class FixedCurrentModel(Model):
     '''benchmark model: predicts all drifter velocities to be the average velocity across the 
        drifter data'''
     
-    def __init__(self, loss_type,training_data,test_data):
-        super().__init__(loss_type,training_data,test_data)
+    def __init__(self, loss_type:str,uncertainty_type:str,training_data,test_data):
+        super().__init__(loss_type,uncertainty_type,training_data,test_data)
         self.model_type = "fixedcurrent"
         self.av_drifter_velocity = None
-        self.uncertainty_type = "st_resid_err"
     
     #------------------------ model constructions -------------------------#
     @staticmethod
