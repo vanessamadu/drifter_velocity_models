@@ -103,6 +103,23 @@ class Model:
         '''
         return np.std(__class__.residuals(obs,preds))
     
+    @staticmethod
+    def std_residual_speed_and_direction(obs:List[float],preds:List[float]):
+        '''
+        returns: returns the standard deviation of the residual speed and residual direction
+        
+        params: 
+        [array] obs: array of velocity observations
+        [array] preds: array of velocity predictions
+        '''
+        if obs.shape[1] != 2:
+            raise ValueError("Residual Velocities must be of the form [u,v]")
+        else:
+            velocity_residuals = __class__.residuals(obs,preds)
+            speed_residuals = linalg.norm(velocity_residuals,axis=1)
+            direction_residuals = np.arctan(\
+                                        np.divide(velocity_residuals[:,1],velocity_residuals[:,0]))
+            return np.std(speed_residuals), np.std(direction_residuals)
     # -------------------- validation -------------------- #
     
     ''' these methods are used for widespread validation'''
