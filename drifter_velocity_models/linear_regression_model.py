@@ -5,13 +5,11 @@ from numpy import linalg
 
 class LinearRegressionModel(Model):
     
-    def __init__(self,loss_type:str,training_data,test_data,covariate_labels):
-        super().__init__(loss_type,training_data,test_data)
+    def __init__(self,loss_type:str,uncertainty_type:str,training_data,test_data,covariate_labels):
+        super().__init__(loss_type,uncertainty_type,training_data,test_data)
         self.model_type = "lr"
         self.covariate_labels = covariate_labels
         self.param_estimate = None
-        self.uncertainty_type = "st_resid_err"
-
     #------------------------ model constructions -------------------------#
     @staticmethod
     def lr(X,beta):
