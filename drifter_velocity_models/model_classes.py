@@ -38,14 +38,39 @@ class Model:
     ''' these methods define methods used for analysis of residuals'''
 
     @staticmethod
-    def velocity_prediction_errors(obs,preds):
+    def residuals(obs:List[float],preds:List[float]):
         '''
+        returns residuals between predictions and actual values
+
         params: 
-        [array] obs: array of velocity observations
+        [array] obs: array of observations
         [array] preds: array of predicted velocities
         '''
-        return [x-x_pred for x,x_pred in zip(obs,preds)]
+        return np.subtract(obs,preds)
+
+    @staticmethod
+    def calculate_loss(obs,preds,loss_function,uncertainty_function):
+        loss = np.multiply([100,180/math.pi],loss_function(obs,preds))
+        uncertainty = np.multiply([100,180/math.pi],uncertainty_function(obs,preds))
+        return loss, uncertainty
+    #------------------------ loss functions -------------------------#
+    ''' these methods define the loss functions used to measure model prediction performance 
+        and the associated incertainty.'''
     
+    @staticmethod
+    def rmse(obs:List[float],preds:List[float]):
+        '''
+        returns: root mean square error (rmse) over all the predictions made by the model.
+
+        params: 
+        [array] obs: array of observations
+        [array] preds: array of predictions
+        '''
+        squared_residuals = np.square(__class__.residuals(obs,preds))
+        return np.sqrt(np.mean(squared_residuals))
+        
+    '''speed_errs,dir_errs = __class__.speed_dir_prediction_errors(__class__.residuals(obs,preds))
+        return [linalg.norm(speed_errs)/np.sqrt(len(speed_errs)), linalg.norm(dir_errs)/np.sqrt(len(dir_errs))]'''
     @staticmethod
     def speed_dir_prediction_errors(errs):
         '''
@@ -58,27 +83,6 @@ class Model:
         dir_errs = [np.abs(np.arctan(err)) for err in errs]
 
         return [speed_errs,dir_errs]
-
-    @staticmethod
-    def calculate_loss(obs,preds,loss_function,uncertainty_function):
-        loss = np.multiply([100,180/math.pi],loss_function(obs,preds))
-        uncertainty = np.multiply([100,180/math.pi],uncertainty_function(obs,preds))
-        return loss, uncertainty
-    #------------------------ loss functions -------------------------#
-    ''' these methods define the loss functions used to measure model prediction performance 
-        and the associated incertainty.'''
-    
-    @staticmethod
-    def rmse(obs,preds):
-        '''
-        returns: root mean square error (rmse) over all the predictions made by the model.
-
-        params: 
-        [array] obs: array of velocity observations
-        [array] preds: array of predicted velocities
-        '''
-        speed_errs,dir_errs = __class__.speed_dir_prediction_errors(__class__.velocity_prediction_errors(obs,preds))
-        return [linalg.norm(speed_errs)/np.sqrt(len(speed_errs)), linalg.norm(dir_errs)/np.sqrt(len(dir_errs))]
     
     @staticmethod
     def standard_errors(obs,preds):
@@ -89,7 +93,7 @@ class Model:
         [array] obs: array of velocity observations
         [array] preds: array of predicted velocities
         '''
-        speed_errs,dir_errs = __class__.speed_dir_prediction_errors(__class__.velocity_prediction_errors(obs,preds))
+        speed_errs,dir_errs = __class__.speed_dir_prediction_errors(__class__.residuals(obs,preds))
         return [np.std(speed_errs),np.std(dir_errs)]
     
     # -------------------- validation -------------------- #
