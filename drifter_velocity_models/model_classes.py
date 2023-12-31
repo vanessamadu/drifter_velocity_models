@@ -68,21 +68,29 @@ class Model:
         '''
         squared_residuals = np.square(__class__.residuals(obs,preds))
         return np.sqrt(np.mean(squared_residuals))
-        
-    '''speed_errs,dir_errs = __class__.speed_dir_prediction_errors(__class__.residuals(obs,preds))
-        return [linalg.norm(speed_errs)/np.sqrt(len(speed_errs)), linalg.norm(dir_errs)/np.sqrt(len(dir_errs))]'''
+    
     @staticmethod
-    def speed_dir_prediction_errors(errs):
+    def rms_residual_speed_and_direction(obs:List[float],preds:List[float]):
         '''
-        returns: prediction errors for speed, and direction for each prediction the model makes
+        returns: Returns the root mean square (rms) of the speed and rms of the direction of the velocity residuals
 
         params:
-        [array] errs: velocity prediction errors
+        [array] obs: array of observations
+        [array] preds: array of predictions
         '''
-        speed_errs = [linalg.norm(err) for err in errs]
-        dir_errs = [np.abs(np.arctan(err)) for err in errs]
+        if obs.shape[1] != 2:
+            raise ValueError("Residual Velocities must be of the form [u,v]")
+        else:
+            velocity_residuals = __class__.residuals(obs,preds)
+            rms_residual_speed = np.sqrt(np.mean(\
+                                         np.square(\
+                                             linalg.norm(velocity_residuals,axis=1))))
+            residual_direction = np.arctan(np.divide(velocity_residuals[:,1],velocity_residuals[:,0]))
+            rms_residual_direction = np.sqrt(np.mean(\
+                                            np.square(\
+                                                residual_direction)))
 
-        return [speed_errs,dir_errs]
+        return rms_residual_speed, rms_residual_direction
     
     @staticmethod
     def standard_errors(obs,preds):
