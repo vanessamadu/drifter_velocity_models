@@ -6,9 +6,8 @@ import numpy as np
 from numpy import linalg
 import pandas as pd
 import math
-from scipy import stats
-# plotting #
-import matplotlib.pyplot as plt
+from typing import List
+
 
 ##### load data #####
 data = pd.read_hdf("ocean_data.h5")
@@ -18,7 +17,7 @@ class Model:
     this class will be the parent class of all ocean models that we will be using
     and it will define attributes and methods common to all specific model classes.
     '''
-    def __init__(self, loss_type:str,training_data,test_data):
+    def __init__(self, loss_type:str,training_data:List[float],test_data:List[float]):
         ## function specifiers
         self.loss_type = loss_type # specify loss function
         self.model_type = None
@@ -34,34 +33,8 @@ class Model:
         return f"Ocean drifter model with type: {self.model_type} loss: {self.loss_type}, class: {type(self)}"
 
     #++++++++++++++++++++++++ STATIC METHODS ++++++++++++++++++++++++++++#
-    #------------------------ loss functions -------------------------#
-    ''' these methods define the loss functions used to measure model prediction performance'''
     
-    @staticmethod
-    def rmse(obs,preds):
-        '''
-        returns: root mean square error (rmse) over all the predictions made by the model.
-
-        params: 
-        [array] obs: array of velocity observations
-        [array] preds: array of predicted velocities
-        '''
-        speed_errs,dir_errs = __class__.speed_dir_prediction_errors(__class__.velocity_prediction_errors(obs,preds))
-        return [linalg.norm(speed_errs)/np.sqrt(len(speed_errs)), linalg.norm(dir_errs)/np.sqrt(len(dir_errs))]
-    
-    @staticmethod
-    def standard_errors(obs,preds):
-        '''
-        returns: standard error of the residuals for speed and direction.
-        
-        params: 
-        [array] obs: array of velocity observations
-        [array] preds: array of predicted velocities
-        '''
-        speed_errs,dir_errs = __class__.speed_dir_prediction_errors(__class__.velocity_prediction_errors(obs,preds))
-        return [np.std(speed_errs),np.std(dir_errs)]
-    
-    #------------------------ error analysis --------------------------#
+    #------------------------ error functions --------------------------#
     ''' these methods define methods used for analysis of residuals'''
 
     @staticmethod
@@ -91,6 +64,33 @@ class Model:
         loss = np.multiply([100,180/math.pi],loss_function(obs,preds))
         uncertainty = np.multiply([100,180/math.pi],uncertainty_function(obs,preds))
         return loss, uncertainty
+    #------------------------ loss functions -------------------------#
+    ''' these methods define the loss functions used to measure model prediction performance 
+        and the associated incertainty.'''
+    
+    @staticmethod
+    def rmse(obs,preds):
+        '''
+        returns: root mean square error (rmse) over all the predictions made by the model.
+
+        params: 
+        [array] obs: array of velocity observations
+        [array] preds: array of predicted velocities
+        '''
+        speed_errs,dir_errs = __class__.speed_dir_prediction_errors(__class__.velocity_prediction_errors(obs,preds))
+        return [linalg.norm(speed_errs)/np.sqrt(len(speed_errs)), linalg.norm(dir_errs)/np.sqrt(len(dir_errs))]
+    
+    @staticmethod
+    def standard_errors(obs,preds):
+        '''
+        returns: standard error of the residuals for speed and direction.
+        
+        params: 
+        [array] obs: array of velocity observations
+        [array] preds: array of predicted velocities
+        '''
+        speed_errs,dir_errs = __class__.speed_dir_prediction_errors(__class__.velocity_prediction_errors(obs,preds))
+        return [np.std(speed_errs),np.std(dir_errs)]
     
     # -------------------- validation -------------------- #
     
