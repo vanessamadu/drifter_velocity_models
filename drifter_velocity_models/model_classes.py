@@ -19,10 +19,12 @@ class Model:
     and it will define attributes and methods common to all specific model classes.
     '''
     def __init__(self, loss_type:str,training_data,test_data):
+        ## function specifiers
         self.loss_type = loss_type # specify loss function
+        self.model_type = None
+        ## data attributes
         self.training_data = training_data # data as pd dataframe
         self.test_data = test_data # data as pd dataframe
-        self.model_type = None
         ## for probabilistic regression models
         self.trained_distribution = None
         self.test_distribution = None
