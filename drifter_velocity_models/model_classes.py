@@ -17,8 +17,8 @@ class Model:
     this class will be the parent class of all ocean models that we will be using
     and it will define attributes and methods common to all specific model classes.
     '''
-    def __init__(self, loss_type:str,training_data:List[float],test_data:List[float]):
-        ## function specifiers
+    def __init__(self, loss_type:str,uncertainty_type:str,training_data:List[float],test_data:List[float]):
+        ## model specifiers
         self.loss_type = loss_type # specify loss function
         self.model_type = None
         ## data attributes
@@ -123,6 +123,7 @@ class Model:
 
     loss_functions = {'rmse':rmse, 'rms_s_d':rms_residual_speed_and_direction}
     uncertainty_functions = {'sre':standard_error_of_residuals, 'sr_s_d':std_residual_speed_and_direction}
+    
     # -------------------- validation -------------------- #
 
     @staticmethod
@@ -148,6 +149,7 @@ class Model:
     
     @property
     def uncertainty_type(self):
+        '(setter) uncertainty type which acts as a dict key to assign appropriate uncertainty function'
         return self._uncertainty_type
     
     @property
@@ -168,6 +170,7 @@ class Model:
     
     @property
     def uncertainty_function(self):
+        '(no setter) assigns appropriate uncertainty function according to uncertainty_type'
         return self.uncertainty_functions[self.uncertainty_type]
     
     # --------------------- setters ------------------------ #
