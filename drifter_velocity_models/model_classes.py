@@ -32,11 +32,9 @@ class Model:
         ''' if a model is operated on by the string operator, it returns a description of the model'''
         return f"Ocean drifter model with type: {self.model_type} loss: {self.loss_type}, class: {type(self)}"
 
+
     #++++++++++++++++++++++++ STATIC METHODS ++++++++++++++++++++++++++++#
     
-    #------------------------ error functions --------------------------#
-    ''' these methods define methods used for analysis of residuals'''
-
     @staticmethod
     def residuals(obs:List[float],preds:List[float]):
         '''
@@ -120,9 +118,12 @@ class Model:
             direction_residuals = np.arctan(\
                                         np.divide(velocity_residuals[:,1],velocity_residuals[:,0]))
             return np.std(speed_residuals), np.std(direction_residuals)
-    # -------------------- validation -------------------- #
     
-    ''' these methods are used for widespread validation'''
+    #=== loss class variables ===#
+
+    loss_functions = {'rmse':rmse, 'rms_s_d':rms_residual_speed_and_direction}
+    uncertainty_functions = {'sre':standard_error_of_residuals, 'sr_s_d':std_residual_speed_and_direction}
+    # -------------------- validation -------------------- #
 
     @staticmethod
     def check_coordinates(lon:float,lat:float):
@@ -196,10 +197,7 @@ class Model:
         'changes the value of the test_data property'
         self._test_data = data_subset
     
-    #++++++++++++++++++++++ CLASS VARIABLES +++++++++++++++++++++++++++#
 
-    loss_functions = {'rmse':rmse}
-    uncertainty_functions = {'st_resid_err':standard_errors}
 
     #++++++++++++++++++++++ INSTANCE METHODS ++++++++++++++++++++++++++#
 
