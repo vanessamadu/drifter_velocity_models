@@ -34,6 +34,13 @@ class Model:
 
 
     #++++++++++++++++++++++++ STATIC METHODS ++++++++++++++++++++++++++++#
+    @staticmethod
+    def to_degrees(arr:List[float]):
+        return np.rad2deg(arr)
+    
+    @staticmethod
+    def to_cm_per_second(arr:List[float]):
+        return np.multiply(100,arr)
     
     @staticmethod
     def residuals(obs:List[float],preds:List[float]):
@@ -45,12 +52,7 @@ class Model:
         [array] preds: array of predicted velocities
         '''
         return np.subtract(obs,preds)
-
-    @staticmethod
-    def calculate_loss(obs,preds,loss_function,uncertainty_function):
-        loss = np.multiply([100,180/math.pi],loss_function(obs,preds))
-        uncertainty = np.multiply([100,180/math.pi],uncertainty_function(obs,preds))
-        return loss, uncertainty
+    
     #------------------------ loss functions -------------------------#
     ''' these methods define the loss functions used to measure model prediction performance 
         and the associated incertainty.'''
@@ -65,7 +67,7 @@ class Model:
         [array] preds: array of predictions
         '''
         squared_residuals = np.square(__class__.residuals(obs,preds))
-        return np.sqrt(np.mean(squared_residuals))
+        return __class__.to_cm_per_second(np.sqrt(np.mean(squared_residuals)))
     
     @staticmethod
     def rms_residual_speed_and_direction(obs:List[float],preds:List[float]):
@@ -88,18 +90,18 @@ class Model:
                                             np.square(\
                                                 residual_direction)))
 
-        return rms_residual_speed, rms_residual_direction
+        return __class__.to_cm_per_second(rms_residual_speed), __class__.to_degrees(rms_residual_direction)
     
     @staticmethod
     def standard_error_of_residuals(obs:List[float],preds:list[float]):
         '''
-        returns: returns the standard deviation of the residuals
+        returns: the standard deviation of the residuals
         
         params: 
         [array] obs: array of observations
         [array] preds: array of predictions
         '''
-        return np.std(__class__.residuals(obs,preds))
+        return __class__.to_cm_per_second(np.std(__class__.residuals(obs,preds)))
     
     @staticmethod
     def std_residual_speed_and_direction(obs:List[float],preds:List[float]):
@@ -117,8 +119,9 @@ class Model:
             speed_residuals = linalg.norm(velocity_residuals,axis=1)
             direction_residuals = np.arctan(\
                                         np.divide(velocity_residuals[:,1],velocity_residuals[:,0]))
-            return np.std(speed_residuals), np.std(direction_residuals)
-    
+            return __class__.to_cm_per_second(np.std(speed_residuals)),\
+                  __class__.to_degrees(np.std(direction_residuals))
+       
     #=== loss class variables ===#
 
     loss_functions = {'rmse':rmse, 'rms_s_d':rms_residual_speed_and_direction}
@@ -199,20 +202,17 @@ class Model:
     def test_data(self,data_subset):
         'changes the value of the test_data property'
         self._test_data = data_subset
-    
-
 
     #++++++++++++++++++++++ INSTANCE METHODS ++++++++++++++++++++++++++#
 
-    def train_loss(self):
+    def loss(self,test_or_train):
         'calculate and return training loss'
-        obs = np.array(self.training_data[["u","v"]])
-        pred = self.trained_prediction
-        return self.calculate_loss(obs,pred,self.loss_function,self.uncertainty_function)
-    
-    def test_loss(self):
-        'calculate and return test loss'
-        obs = np.array(self.test_data[["u","v"]])
-        pred = self.testing_prediction
-        return self.calculate_loss(obs,pred,self.loss_function,self.uncertainty_function)
-    
+        if test_or_train == "train":
+            obs = np.array(self.training_data[["u","v"]])
+            preds = self.trained_prediction
+        elif test_or_train == "test":
+            obs = np.array(self.test_data[["u","v"]])
+            preds = self.testing_prediction
+        else:
+            raise ValueError("Invalid data subset, pass either `test` or `train`")
+        return self.loss_function(obs,preds), self.uncertainty_function(obs,preds)

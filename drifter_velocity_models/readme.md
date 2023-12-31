@@ -2,18 +2,24 @@
 
 ## Model Attributes
 - `loss_type` (str): The label of the loss function to be used (`rmse`,`rms_s_d`)
--`uncertainty_type` (str): The label of the uncertainty function to be used (`sre`, `sr_s_d`)
+- `uncertainty_type` (str): The label of the uncertainty function to be used (`sre`, `sr_s_d`)
 - `model_type` (str): The label for the type of model (`bathtub`,`sbr`,`fixedcurrent`,`lr`,`ngboost_pr`)
 - `training_data` (DataFrame): Data used for training
 - `test_data` (DataFrame): Data used for testing
 - `trained_distribution` (array[`scipy.multivariate_normal`]): For Probabilistic Regression Models - Array of multivariate normal distributions with parameters specified from the training data according to the learned model for the probability distribution parameters.
 - `test_distribution` (array[`scipy.multivariate_normal`]): For Probabilistic Regression Models - Array of multivariate normal distributions with parameters specified from the test data according to the learned model for the probability distribution parameters.
+
 ### Model Properties without Setters
 These are properties that are designed not to be changed manually.
 - `loss_function` (func): appropriate loss function according to `loss_type`.
 - `uncertainty_function` (func): appropriate uncertainty function according to `uncertainty_type`.
 
+## Model Instance Methods
+- `loss`: returns the test or train loss as appropriate.
+
 ## Class Functions
+- `to_degrees`: Converts angles from radians to degrees
+- `to_cm_per_second`: Converts measurements with units m/s to cm/s
 - Residuals: Returns the residuals between an array of predictions and associated observations.
 
 ## Error Metrics
