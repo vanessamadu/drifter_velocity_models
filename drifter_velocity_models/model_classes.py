@@ -20,6 +20,7 @@ class Model:
     def __init__(self, loss_type:str,uncertainty_type:str,training_data:List[float],test_data:List[float]):
         ## model specifiers
         self.loss_type = loss_type # specify loss function
+        self.uncertainty_type = uncertainty_type
         self.model_type = None
         ## data attributes
         self.training_data = training_data # data as pd dataframe
