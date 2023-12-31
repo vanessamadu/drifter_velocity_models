@@ -8,4 +8,4 @@
 - RMS of Residual Speed and Residual Direction: Returns the root mean square (rms) of the speed and rms of the direction of the velocity residuals: $$\sqrt{\frac{1}{N} \sum_{i=1}^{N}\|u-u\|^{2}}, \quad \sqrt{\frac{1}{N}\sum_{i=1}^N\left[\arctan{\frac{v}{u}}\right]^2}$$
 
 ### Uncertainty Quantification
-- Standard Error of the Velocity Residuals: Returns the standard deviation of the residuals: $$\sqrt{\frac{1}{2N}\sum_{i=1}^N\sum_{j=1}^2\left(\varepsilon^{(i)}_j-\hat{\varepsilon}^{(i)}_j\right)^2}$$
+- Standard Error of the Velocity Residuals: Returns the standard deviation of the residuals: $$\sqrt{\frac{1}{2N}\sum_{i=1}^N\sum_{j=1}^2\left(\varepsilon^{(i)}_j-\bar{\varepsilon}_j\right)^2}$$
