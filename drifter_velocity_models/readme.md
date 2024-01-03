@@ -33,7 +33,16 @@ $$\sqrt{\frac{1}{N}\sum_{i=1}^N (\|\mathbf{\varepsilon}^{(i)}\|-\overline{\|{\ma
 
 # Model Sub-Types
 ## BathtubModel Objects
+Benchmark Model - Predicts all velocities to be zero at all positions and for all times.
 ### BathtubModel Attributes
 - Inherits all attributes and methods from the `Model` class.
 - `model_type` is `'bathtub'`.
-- `model_function` defined by a static method, `bathtub`, where `bathtub(lon,lat) = [0,0]` for all longitudes and latitudes.
+- `model_function` is defined by a static method, `bathtub`, where `bathtub(lon,lat) = [0,0]` for all longitudes and latitudes.
+
+## SBRModel Objects
+Benchmark Model: Predicts velocities according to a steady solid body rotation model: $\mathbf{u} = (-f_0 \text{lat}, f_0 \text{lon})$ where $f_0$ is the Coriolis parameter at $30^\circ \text{N}$.
+### SBRModel Attributes
+- Inherits all attributes and methods from the `Model` class.
+- `model_type` is `'sbr'`.
+- `f_0` is `7.27e-5` but can be changed.
+- `model_functiom` is defined by a static method, `sbr`, where `sbr(lon,lat) = [-f0*lat, f0*lon]`.
