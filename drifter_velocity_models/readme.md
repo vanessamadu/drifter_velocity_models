@@ -20,7 +20,7 @@ These are properties that are designed not to be changed manually.
 ## Class Functions
 - `to_degrees`: Converts angles from radians to degrees
 - `to_cm_per_second`: Converts measurements with units m/s to cm/s
-- Residuals: Returns the residuals between an array of predictions and associated observations.
+- `residuals`: Returns the residuals between an array of predictions and associated observations.
 
 ## Error Metrics
 - RMSE (`rmse`): Root mean square error over every velocity component prediction made by the model: $$\sqrt{\frac{1}{2N}\sum_{i=1}^N\sum_{j=1}^2 (\mathbf{u}^{(i)}_j-\hat{\mathbf{u}}^{(i)}_j)^2}$$ where $\mathbf{u} = (u,v)$ is the predicted drifter velocity and $\hat{\mathbf{u}}$ is the observed drifter velocity. 
@@ -30,3 +30,10 @@ These are properties that are designed not to be changed manually.
 - Standard Error of the Velocity Residuals (`standard_error_of_residuals`): Returns the standard deviation of the residuals: $$\sqrt{\frac{1}{2N}\sum_{i=1}^N\sum_{j=1}^2\left(\varepsilon^{(i)}_j-\bar{\varepsilon}_j\right)^2}$$
 - Standard Deviation of the Residual Speed and Residual Direction (`std_residual_speed_and_direction`): Does what it says on the tin:
 $$\sqrt{\frac{1}{N}\sum_{i=1}^N (\|\mathbf{\varepsilon}^{(i)}\|-\overline{\|{\mathbf{\varepsilon}} \|})^2},\quad \sqrt{\frac{1}{N}\sum_{i=1}^N (\|\mathbf{\theta_\varepsilon}^{(i)}\|-\overline{\|{\mathbf{\theta}} \|})^2}$$ where $\varepsilon$ is the matrix of $N$ velocity residuals, and $\theta_\varepsilon$ is the vector of angular residuals (deviations between predicted and observed direction).
+
+# Model Sub-Types
+## BathtubModel Objects
+### BathtubModel Attributes
+- Inherits all attributes and methods from the `Model` class.
+- `model_type` is `'bathtub'`.
+- `model_function` defined by a static method, `bathtub`, where `bathtub(lon,lat) = [0,0]` for all longitudes and latitudes.
