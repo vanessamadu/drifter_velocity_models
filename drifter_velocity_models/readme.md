@@ -44,5 +44,14 @@ Benchmark Model: Predicts velocities according to a steady solid body rotation m
 ### SBRModel Attributes
 - Inherits all attributes and methods from the `Model` class.
 - `model_type` is `'sbr'`.
-- `f_0` is `7.27e-5` but can be changed.
+- `f_0` takes `7.27e-5` as default.
 - `model_functiom` is defined by a static method, `sbr`, where `sbr(lon,lat) = [-f0*lat, f0*lon]`.
+
+## FixedCurrentModel Objects
+Benchmark Model: Predicts all drifter velocities to be the average velocity across the drifter data.
+### FixedCurrentModel Attributes
+- Inherits all attributes and methods from the `Model` class.
+- `model_type` is `fixedcurrent`.
+- `av_drifter_velocity` initialised as `None` but populated with the average drifter velocity over all the (training) data.
+- `model_function` is defined by a static method that returns the average drifter velocity which is passing into it via the `av_drifter_velocity` after it is initially calculated.
+
