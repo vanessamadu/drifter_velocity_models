@@ -42,7 +42,7 @@ class Model:
     @staticmethod
     def to_cm_per_second(arr:List[float]):
         return np.multiply(100,arr)
-    
+    '''NOTE:ITS ALREADY IN CM/S!!!!'''
     @staticmethod
     def residuals(obs:List[float],preds:List[float]):
         '''
@@ -68,7 +68,7 @@ class Model:
         [array] preds: array of predictions
         '''
         squared_residuals = np.square(__class__.residuals(obs,preds))
-        return __class__.to_cm_per_second(np.sqrt(np.mean(squared_residuals)))
+        return np.sqrt(np.mean(squared_residuals))
     
     @staticmethod
     def rms_residual_speed_and_direction(obs:List[float],preds:List[float]):
@@ -91,7 +91,7 @@ class Model:
                                             np.square(\
                                                 residual_direction)))
 
-        return __class__.to_cm_per_second(rms_residual_speed), __class__.to_degrees(rms_residual_direction)
+        return rms_residual_speed, __class__.to_degrees(rms_residual_direction)
     
     @staticmethod
     def standard_error_of_residuals(obs:List[float],preds:list[float]):
@@ -102,7 +102,7 @@ class Model:
         [array] obs: array of observations
         [array] preds: array of predictions
         '''
-        return __class__.to_cm_per_second(np.std(__class__.residuals(obs,preds)))
+        return np.std(__class__.residuals(obs,preds))
     
     @staticmethod
     def std_residual_speed_and_direction(obs:List[float],preds:List[float]):
@@ -120,7 +120,7 @@ class Model:
             speed_residuals = linalg.norm(velocity_residuals,axis=1)
             direction_residuals = np.abs(np.arctan(\
                                         np.divide(velocity_residuals[:,1],velocity_residuals[:,0])))
-            return __class__.to_cm_per_second(np.std(speed_residuals)),\
+            return np.std(speed_residuals),\
                   __class__.to_degrees(np.std(direction_residuals))
        
     #=== loss class variables ===#
