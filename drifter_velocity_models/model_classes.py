@@ -118,8 +118,8 @@ class Model:
         else:
             velocity_residuals = __class__.residuals(obs,preds)
             speed_residuals = linalg.norm(velocity_residuals,axis=1)
-            direction_residuals = np.abs(np.arctan(\
-                                        np.divide(velocity_residuals[:,1],velocity_residuals[:,0])))
+            direction_residuals = np.arctan(\
+                                        np.divide(velocity_residuals[:,1],velocity_residuals[:,0]))
             return __class__.to_cm_per_second(np.std(speed_residuals)),\
                   __class__.to_degrees(np.std(direction_residuals))
        
