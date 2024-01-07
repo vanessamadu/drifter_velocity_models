@@ -53,7 +53,7 @@ Benchmark Model: Predicts all drifter velocities to be the average velocity acro
 - Inherits all attributes and methods from the `Model` class.
 - `model_type` is `fixedcurrent`.
 - `av_drifter_velocity` (array) initialised as `None` but populated with the average drifter velocity over all the (training) data.
-- `model_function` is defined by a static method that returns the average drifter velocity, which is passed into it via the `av_drifter_velocity` after it is initially calculated.
+- `model_function` is defined by a static method that returns the average drifter velocity which is passing into it via the `av_drifter_velocity` after it is initially calculated.
 
 ## LinearRegressionModel Objects
 Predicts velocities according to a linear regression model.
@@ -67,5 +67,5 @@ Predicts velocities according to a linear regression model.
 These are properties that are designed not to be changed manually.
 - `design` (array): Returns the design matrix associated with the training data.
 ### LinearRegressionModel (Instance) Methods
-- `calculate_param_estimate` (func): Returns the least squares parameter estimate associated with the training data.
+-`calculate_param_estimate` (func): Returns the least squares parameter estimate associated with the training data.
 
